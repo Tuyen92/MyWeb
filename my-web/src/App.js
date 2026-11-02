@@ -1,12 +1,14 @@
 import { useCallback, useState } from 'react';
 import { CONFIG } from './config';
-import { WORKS } from './data/works';
+import { EXPERIENCE } from './data/experience';
+import { SKILLS } from './data/skills';
 import BackgroundEffects from './components/BackgroundEffects';
 import Navbar from './components/Navbar';
 import Hero3D from './components/Hero3D';
 import Hero from './components/Hero';
 import About from './components/About';
-import Work from './components/Work';
+import Skills from './components/Skills';
+import Experience from './components/Experience';
 import Contact from './components/Contact';
 import ContactCard from './components/ContactCard';
 import Footer from './components/Footer';
@@ -23,8 +25,9 @@ export default function App() {
       <Hero3D />
       <Hero role={CONFIG.role} place={CONFIG.place} vertical={CONFIG.vertical} />
       <About />
-      <Work items={WORKS} />
-      <Contact email={CONFIG.email} />
+      <Skills items={SKILLS} />
+      <Experience items={EXPERIENCE} />
+      <Contact names={CONFIG.aliases} fonts={CONFIG.aliasFonts} onOpen={openCard} />
       <Footer name={CONFIG.name} />
       <ContactCard open={cardOpen} onClose={closeCard} {...CONFIG.contact} />
     </>

@@ -80,18 +80,29 @@ export default function ContactCard({ open, onClose, heading, items, avatar }) {
           onPointerUp={endDrag}
           onPointerCancel={endDrag}
         >
+          <span className="cc-scan" aria-hidden="true" />
+
+          {/* thanh trạng thái trên cùng (kiểu HUD) */}
+          <div className="cc-bar mono">
+            <span>FIG.03</span>
+            <span className="cc-live">Channel open</span>
+          </div>
+
           <button type="button" className="cc-x" onClick={onClose} aria-label="Close">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-              <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="square" />
             </svg>
           </button>
 
-          <h3 className='cc-h3'>{heading}</h3>
+          <h3 className="cc-h3">{heading}</h3>
 
           <div className="cc-grid">
-            {items.map((it) => (
+            {items.map((it, n) => (
               <div className="cc-item" key={it.label}>
-                <span className="cc-l">{it.label}</span>
+                <span className="cc-l">
+                  <i>{String(n + 1).padStart(2, '0')}</i>
+                  {it.label}
+                </span>
                 {it.lines.map((l) =>
                   l.href ? (
                     <a key={l.text} className="cc-v" href={l.href} target="_blank" rel="noreferrer">
@@ -105,6 +116,11 @@ export default function ContactCard({ open, onClose, heading, items, avatar }) {
                 )}
               </div>
             ))}
+          </div>
+
+          <div className="cc-foot mono">
+            <span>Signal ▮▮▮▯</span>
+            <span>Drag to move</span>
           </div>
 
           {avatar && <img className="cc-avatar" src={avatar} alt="" draggable="false" />}
