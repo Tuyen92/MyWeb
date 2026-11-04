@@ -5,8 +5,16 @@ import { mouse } from '../lib/mouse';
 import { buildText } from '../lib/buildText';
 import { createDust, createEnvironment, createRings } from '../lib/sceneParts';
 
-export default function Hero3D() {
+/**
+ * started: false trong lúc loading → animation vào cảnh (xoay chữ) chưa chạy, chờ loader xong mới bắt đầu
+ * onReady: gọi một lần khi chữ 3D đã dựng xong và đã vẽ vài khung hình (shader đã biên dịch)
+ */
+export default function Hero3D({ started = true, onReady }) {
   const ref = useRef(null);
+  const startedRef = useRef(started);
+  const readyRef = useRef(onReady);
+  startedRef.current = started;
+  readyRef.current = onReady;
 
   useEffect(() => {
     const cv = ref.current;
@@ -48,18 +56,33 @@ export default function Hero3D() {
     };
     window.addEventListener('resize', fit);
 
-    buildText(CONFIG).then((r) => {
-      if (dead) return;
-      textHolder.add(r.group);
-      tw = r.width;
-      th = r.height;
-      fit();
-    });
+    buildText(CONFIG)
+      .then((r) => {
+        if (dead) return;
+        textHolder.add(r.group);
+        tw = r.width;
+        th = r.height;
+        fit();
+      })
+      .catch(() => {
+        /* lỗi dựng chữ cũng không được giữ loader mãi */
+      })
+      .finally(() => {
+        // chờ vài khung hình để GPU biên dịch shader xong rồi mới báo sẵn sàng
+        let n = 0;
+        const wait = () => {
+          if (dead) return;
+          if (++n >= 3) readyRef.current?.();
+          else requestAnimationFrame(wait);
+        };
+        requestAnimationFrame(wait);
+      });
     fit();
 
-    const t0 = performance.now();
+    let t0 = performance.now();
     let sx = 0, sy = 0;
     const loop = () => {
+      if (!startedRef.current) t0 = performance.now(); // giữ nguyên ở khung đầu cho tới khi loader xong
       const t = (performance.now() - t0) / 1000;
       const p = Math.min(1, t / 2.6);
       const e = 1 - Math.pow(1 - p, 3);

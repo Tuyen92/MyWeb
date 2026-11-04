@@ -102,6 +102,8 @@ canvas.dust {
   z-index: 2; /* trên scene 3D, dưới nội dung (z-index: 5) và grain */
   pointer-events: none;
   opacity: 0;
+}
+body.loaded canvas.dust {
   animation: fadein 3s 0.4s forwards;
 }
 canvas.gl {
@@ -112,6 +114,8 @@ canvas.gl {
   z-index: 1;
   pointer-events: none;
   opacity: 0;
+}
+body.loaded canvas.gl {
   animation: fadein 2s 0.2s forwards;
 }
 @keyframes fadein {
@@ -435,12 +439,27 @@ h2 {
   }
 }
 .exp-row {
+  /* là <button> nên reset style mặc định */
   display: flex;
+  width: 100%;
   gap: 30px;
   align-items: baseline;
   padding: 30px 0;
+  background: none;
+  border: 0;
   border-top: 1px solid var(--line);
+  border-radius: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
   transition: padding 0.4s, color 0.3s;
+}
+.exp-row:focus-visible {
+  outline: 1px solid var(--ag);
+  outline-offset: -1px;
+  padding-left: 2.5vw;
+  color: var(--ag);
 }
 .exp > div:last-child .exp-row {
   border-bottom: 1px solid var(--line);
@@ -962,6 +981,516 @@ a.cc-v:focus-visible {
   .cc.open .cc-card,
   .cc-scan,
   .cc-live::before {
+    animation: none;
+  }
+}
+
+/* ================= Experience sheet (kéo từ dưới màn hình lên) ================= */
+.xs {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  visibility: hidden;
+  transition: visibility 0s linear 0.75s; /* chờ trượt xuống xong mới ẩn hẳn */
+}
+.xs.open {
+  visibility: visible;
+  pointer-events: auto;
+  transition: none;
+}
+.xs-back {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  cursor: pointer;
+}
+.xs.open .xs-back {
+  opacity: 1;
+}
+.xs-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: min(88vh, 88dvh);
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #05060a, #000 40%);
+  border-top: 1px solid rgba(223, 230, 255, 0.35);
+  box-shadow: 0 -30px 90px rgba(0, 0, 0, 0.8), 0 -1px 60px rgba(150, 170, 255, 0.12);
+  overflow: hidden;
+  transform: translateY(100%);
+  transition: transform 0.75s cubic-bezier(0.2, 0.9, 0.2, 1);
+  will-change: transform;
+}
+.xs.open .xs-panel {
+  transform: translateY(0);
+}
+.xs-scan {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.025) 0 1px,
+    transparent 1px 3px
+  );
+}
+/* thanh trên + thanh dưới */
+.xs-bar,
+.xs-foot {
+  position: relative;
+  z-index: 2;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 4vw;
+  font-size: 9px;
+  color: var(--mut);
+  white-space: nowrap;
+}
+.xs-bar {
+  height: 52px;
+  border-bottom: 1px solid var(--line);
+}
+.xs-bar > span:first-child {
+  color: var(--ag);
+}
+.xs-bar .xs-live {
+  margin-left: auto;
+  margin-right: 14px;
+}
+.xs-live::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-right: 7px;
+  border-radius: 50%;
+  background: var(--ag);
+  box-shadow: 0 0 8px var(--ag);
+  animation: figblink 1.6s steps(2, jump-none) infinite;
+}
+.xs-foot {
+  height: 40px;
+  border-top: 1px solid var(--line);
+}
+.xs-x {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ag);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+.xs-x:hover,
+.xs-x:focus-visible {
+  background: var(--ag);
+  color: #000;
+  box-shadow: 0 0 16px rgba(220, 230, 255, 0.5);
+  outline: none;
+}
+
+/* vùng nội dung cuộn được */
+.xs-scroll {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  outline: none;
+}
+.xs-body {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: 6vw;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: clamp(32px, 6vh, 72px) 4vw clamp(40px, 8vh, 90px);
+}
+.xs-head {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-self: start;
+}
+.xs-company {
+  font-family: "Unbounded", sans-serif;
+  font-weight: 800;
+  font-size: clamp(28px, 4.6vw, 68px);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  background: linear-gradient(100deg, #8c93a6, #fff 40%, #b9c2d8 70%, #8c93a6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  overflow-wrap: anywhere;
+}
+.xs-role {
+  font-family: "Unbounded", sans-serif;
+  font-weight: 500;
+  font-size: clamp(13px, 1.4vw, 20px);
+  color: var(--fg);
+}
+.xs-period {
+  color: var(--ag);
+}
+.xs-loc {
+  color: var(--mut);
+}
+.xs-content {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(28px, 5vh, 52px);
+}
+.xs-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+  color: var(--mut);
+  font-weight: 400;
+}
+.xs-label i {
+  font-style: normal;
+  color: var(--ag);
+}
+.xs-sum {
+  font-size: clamp(16px, 1.5vw, 21px);
+  line-height: 1.65;
+  color: var(--fg);
+}
+.xs-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.xs-list li {
+  display: flex;
+  gap: 22px;
+  align-items: baseline;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.xs-list li:last-child {
+  border-bottom: 0;
+}
+.xs-list li > span {
+  flex: none;
+  color: var(--ag);
+}
+.xs-list p {
+  font-size: clamp(14px, 1.25vw, 17px);
+  line-height: 1.65;
+  color: #cfcfd4;
+}
+.xs-tags {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.xs-tags li {
+  padding: 4px 14px;
+  line-height: 2;
+  border: 1px solid var(--line);
+  color: var(--ag);
+}
+
+/* nội dung hiện lần lượt (trượt nhẹ lên) sau khi cửa sổ đã kéo lên */
+.xs-in {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.xs.open .xs-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.7s ease calc(0.3s + var(--i, 0) * 0.08s),
+    transform 0.7s cubic-bezier(0.2, 0.9, 0.2, 1) calc(0.3s + var(--i, 0) * 0.08s);
+}
+
+@media (max-width: 860px) {
+  .xs-panel {
+    height: min(92vh, 92dvh);
+  }
+  .xs-body {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .xs-foot span:last-child {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .xs,
+  .xs-back,
+  .xs-panel,
+  .xs-in,
+  .xs.open .xs-in {
+    transition-duration: 0.01s;
+    transition-delay: 0s;
+  }
+  .xs-live::before {
+    animation: none;
+  }
+}
+
+/* ================= Loading: sao neutron (pulsar) ================= */
+/* Trong lúc loading: khoá cuộn, navbar + hero ẩn; body.loaded (App.js) mở ra */
+body:not(.loaded) {
+  overflow: hidden;
+}
+nav,
+.hero {
+  transition: opacity 1.2s ease 0.25s;
+}
+body:not(.loaded) nav,
+body:not(.loaded) .hero {
+  opacity: 0;
+}
+
+.ld {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+  color: var(--fg);
+  overflow: hidden;
+  transition: opacity 0.9s ease 0.35s, visibility 0s linear 1.25s;
+}
+.ld.out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.ld-bar,
+.ld-foot {
+  position: relative;
+  z-index: 2;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 4vw;
+  font-size: 9px;
+  color: var(--mut);
+  white-space: nowrap;
+}
+.ld-bar {
+  height: 52px;
+  margin-top: env(safe-area-inset-top, 0px);
+  border-bottom: 1px solid var(--line);
+}
+.ld-bar > span:first-child {
+  color: var(--ag);
+}
+.ld-live::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-right: 7px;
+  border-radius: 50%;
+  background: var(--ag);
+  box-shadow: 0 0 8px var(--ag);
+  animation: figblink 1.6s steps(2, jump-none) infinite;
+}
+.ld-foot {
+  height: 40px;
+  margin-bottom: env(safe-area-inset-bottom, 0px);
+  border-top: 1px solid var(--line);
+}
+
+.ld-stage {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(28px, 6vh, 64px);
+}
+.ld-star {
+  position: relative;
+  width: min(40vmin, 280px);
+  aspect-ratio: 1;
+  transition: transform 1.1s cubic-bezier(0.5, 0, 0.2, 1), filter 1.1s ease;
+}
+.ld-name {
+  color: var(--mut);
+  letter-spacing: 0.4em;
+}
+
+/* quầng sáng nhịp đập */
+.ld-halo {
+  position: absolute;
+  inset: -22%;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(210, 222, 255, 0.45),
+    rgba(110, 140, 255, 0.12) 40%,
+    transparent 100%
+  );
+  animation: ld-pulse 1.3s ease-in-out infinite alternate;
+}
+@keyframes ld-pulse {
+  from {
+    transform: scale(0.86);
+    opacity: 0.6;
+  }
+  to {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+/* đường sức từ: hai vòng elip mảnh nghiêng, lắc nhẹ */
+.ld-ring {
+  --r: -24deg;
+  position: absolute;
+  left: -34%;
+  right: -34%;
+  top: 50%;
+  height: 44%;
+  margin-top: -22%;
+  border: 1px solid rgba(223, 230, 255, 0.26);
+  border-radius: 50%;
+  transform: rotate(var(--r));
+  animation: ld-sway 5s ease-in-out infinite alternate;
+}
+.ld-ring.r2 {
+  --r: 38deg;
+  left: -22%;
+  right: -22%;
+  height: 32%;
+  margin-top: -16%;
+  border-style: dashed;
+  border-color: rgba(223, 230, 255, 0.16);
+  animation-duration: 7s;
+  animation-direction: alternate-reverse;
+}
+@keyframes ld-sway {
+  from {
+    transform: rotate(calc(var(--r) - 9deg));
+  }
+  to {
+    transform: rotate(calc(var(--r) + 9deg));
+  }
+}
+
+/* lõi: nhỏ, cực sáng */
+.ld-core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 8px 3px #fff, 0 0 26px 10px rgba(170, 195, 255, 0.9),
+    0 0 80px 28px rgba(100, 130, 255, 0.45);
+  animation: ld-flick 0.65s ease-in-out infinite alternate;
+  transition: transform 1.1s cubic-bezier(0.5, 0, 0.2, 1);
+}
+@keyframes ld-flick {
+  from {
+    filter: brightness(0.85);
+  }
+  to {
+    filter: brightness(1.35);
+  }
+}
+
+/* khi xong: sao bùng sáng rồi màn đen mờ đi để lộ trang */
+.ld.out .ld-star {
+  transform: scale(1.6);
+  filter: brightness(2.2);
+}
+.ld.out .ld-core {
+  transform: scale(5);
+}
+
+/* thanh tiến độ */
+.ld-bottom {
+  position: relative;
+  z-index: 2;
+  flex: none;
+  padding: 0 4vw 26px;
+}
+.ld-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.ld-msg {
+  color: var(--ag);
+}
+.ld-pct {
+  font-family: "Unbounded", sans-serif;
+  font-weight: 700;
+  font-size: clamp(26px, 4.4vw, 56px);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(100deg, #8c93a6, #fff 40%, #b9c2d8 70%, #8c93a6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.ld-track {
+  height: 1px;
+  background: var(--line);
+}
+.ld-track i {
+  display: block;
+  height: 100%;
+  background: var(--ag);
+  box-shadow: 0 0 10px var(--ag);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+@media (max-width: 520px) {
+  .ld-foot span:last-child {
+    display: none;
+  }
+  .ld-name {
+    letter-spacing: 0.25em;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ld-beams,
+  .ld-ring,
+  .ld-halo,
+  .ld-core,
+  .ld-live::before {
     animation: none;
   }
 }
