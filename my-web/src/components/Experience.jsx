@@ -44,7 +44,9 @@ export default function Experience({ items }) {
         item={items[active]}
         index={active}
         total={items.length}
+        items={items}
         onClose={closeSheet}
+        onNavigate={setActive}
       />
     </section>
   );

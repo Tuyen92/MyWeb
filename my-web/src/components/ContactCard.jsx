@@ -14,7 +14,7 @@ export default function ContactCard({ open, onClose, heading, items, avatar }) {
     const el = wrapRef.current;
     if (!el) return;
     const w = el.offsetWidth;
-    const h = el.offsetHeight;
+    // const h = el.offsetHeight;
     const nx = Math.min(window.innerWidth - KEEP, Math.max(KEEP - w, x));
     const ny = Math.min(window.innerHeight - KEEP, Math.max(0, y));
     pos.current = { x: nx, y: ny };
@@ -80,7 +80,6 @@ export default function ContactCard({ open, onClose, heading, items, avatar }) {
           onPointerUp={endDrag}
           onPointerCancel={endDrag}
         >
-          <span className="cc-scan" aria-hidden="true" />
 
           {/* thanh trạng thái trên cùng (kiểu HUD) */}
           <div className="cc-bar mono">
@@ -119,7 +118,6 @@ export default function ContactCard({ open, onClose, heading, items, avatar }) {
           </div>
 
           <div className="cc-foot mono">
-            <span>Signal ▮▮▮▯</span>
             <span>Drag to move</span>
           </div>
 

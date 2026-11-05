@@ -73,10 +73,6 @@ export default function GlitchCycle({ words, fonts = [], className = '' }) {
       const split = 7 * k * st.rgb;
       el.style.opacity = String(Math.max(0.1, (1 - 0.6 * k) * st.flick));
       el.style.transform = `translateX(${((st.rgb - 0.65) * 18 * k).toFixed(2)}px)`;
-      el.style.filter =
-        `url(#${fid}) ` +
-        `drop-shadow(${split}px 0 0 rgba(255,45,85,.8)) ` +
-        `drop-shadow(${-split}px 0 0 rgba(45,220,255,.8))`;
     };
 
     const play = () => {

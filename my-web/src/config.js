@@ -43,7 +43,7 @@ export const CONFIG = {
     avatar: '',
     items: [
       { label: 'Email', lines: [{ text: EMAIL, href: `mailto:${EMAIL}` }] },
-      { label: 'Phone', lines: [{ text: PHONE, href: PHONE }] },
+      { label: 'Phone', lines: [{ text: PHONE }] },
       {
         label: 'Find me on',
         lines: [
