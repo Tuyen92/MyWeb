@@ -6,7 +6,7 @@ import ufo from '../assets/about-ufo.webp';
 const FIGS = [
   {
     src: blackhole,
-    alt: 'Hố đen với đĩa bồi tụ phát sáng trên nền vũ trụ đen',
+    alt: 'img.01',
     no: '01',
     title: 'Event Horizon',
     left: 'SECTOR 7G',
@@ -16,7 +16,7 @@ const FIGS = [
   },
   {
     src: ufo,
-    alt: 'Đĩa bay kim loại nhòe chuyển động trên nền đen, chụp kiểu phim analog',
+    alt: 'img.02',
     no: '02',
     title: 'Unidentified Object',
     left: 'SIGNAL 0x2F',
@@ -38,19 +38,15 @@ export default function About() {
         <div className="about-figs">
           {FIGS.map((f) => (
             <Reveal key={f.no} as="figure" effect="tv" delay={f.delay} className="fig">
-              {/* lớp trong: lơ lửng như phi hành gia trong không trọng lực (giống chữ ở Skills) */}
+              {/* inner class: floating style */}
               <div className="fig-in" style={f.float}>
-                <div className="fig-head mono">
-                  <span>FIG.{f.no}</span>
-                  <span>{f.title}</span>
-                </div>
                 <div className="fig-frame">
                   <img src={f.src} alt={f.alt} loading="lazy" decoding="async" />
                   <span className="fig-scan" aria-hidden="true" />
                 </div>
                 <figcaption className="fig-foot mono">
                   <span>{f.left}</span>
-                  <span className="fig-dot">{f.right}</span>
+                  <span>{f.right}</span>
                 </figcaption>
               </div>
             </Reveal>

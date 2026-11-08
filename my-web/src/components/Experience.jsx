@@ -1,6 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 import Reveal from './Reveal';
 import ExperienceSheet from './ExperienceSheet';
+import { latestRole, stackOf } from '../data/experience';
 
 export default function Experience({ items }) {
   const [active, setActive] = useState(0); // giữ mục cuối cùng được chọn để nội dung không mất khi đóng
@@ -32,9 +33,9 @@ export default function Experience({ items }) {
             <small className="mono exp-period">{e.period}</small>
             <div className="exp-main">
               <em>{e.company}</em>
-              <span className="exp-role">{e.role}</span>
+              <span className="exp-role">{latestRole(e)}</span>
             </div>
-            <small className="mono" style={{ color: 'var(--mut)' }}>{e.stack}</small>
+            <small className="mono" style={{ color: 'var(--mut)' }}>{stackOf(e)}</small>
           </button>
         </Reveal>
       ))}
@@ -44,7 +45,6 @@ export default function Experience({ items }) {
         item={items[active]}
         index={active}
         total={items.length}
-        items={items}
         onClose={closeSheet}
         onNavigate={setActive}
       />

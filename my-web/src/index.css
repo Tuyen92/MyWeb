@@ -282,7 +282,7 @@ h2 {
   max-width: 340px;
 }
 .fig:nth-child(2) {
-  margin-top: clamp(36px, 9vh, 110px); /* so le như bố cục tạp chí */
+  margin-top: clamp(36px, 9vh, 110px);
 }
 /* lớp trong: dùng lại keyframes skill-drift của Skills để ảnh lơ lửng */
 .fig-in {
@@ -290,7 +290,7 @@ h2 {
   will-change: transform;
 }
 .fig:hover .fig-in {
-  animation-play-state: paused; /* rê chuột vào thì đứng yên */
+  animation-play-state: paused; /* right still when hover */
 }
 @media (max-width: 860px) {
   .about-row {
@@ -361,15 +361,6 @@ h2 {
   z-index: 3;
   pointer-events: none;
   opacity: 0.75;
-  background:
-    linear-gradient(var(--ag), var(--ag)) left top / 14px 1px,
-    linear-gradient(var(--ag), var(--ag)) left top / 1px 14px,
-    linear-gradient(var(--ag), var(--ag)) right top / 14px 1px,
-    linear-gradient(var(--ag), var(--ag)) right top / 1px 14px,
-    linear-gradient(var(--ag), var(--ag)) left bottom / 14px 1px,
-    linear-gradient(var(--ag), var(--ag)) left bottom / 1px 14px,
-    linear-gradient(var(--ag), var(--ag)) right bottom / 14px 1px,
-    linear-gradient(var(--ag), var(--ag)) right bottom / 1px 14px;
   background-repeat: no-repeat;
 }
 /* scanline CRT + vignette */
@@ -1102,7 +1093,6 @@ a.cc-v:focus-visible {
   display: flex;
   flex-direction: column;
   gap: clamp(36px, 6vh, 64px);
-  max-width: 1400px;
   margin: 0 auto;
   padding: clamp(32px, 6vh, 72px) 4vw clamp(40px, 8vh, 90px);
 }
@@ -1110,7 +1100,7 @@ a.cc-v:focus-visible {
   display: grid;
   grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
   gap: 4vw;
-  align-items: end;
+  align-items: start; /* đồng bộ: Overview luôn ngang hàng với đầu khối tên công ty */
 }
 .xs-head {
   display: flex;
@@ -1141,6 +1131,12 @@ a.cc-v:focus-visible {
 }
 .xs-loc {
   color: var(--mut);
+}
+/* các <section> trong sheet không được thừa hưởng padding / min-height của section toàn trang */
+.xs-sec {
+  min-height: 0;
+  padding: 0;
+  z-index: auto;
 }
 .xs-content {
   display: flex;
@@ -1174,20 +1170,27 @@ a.cc-v:focus-visible {
 }
 .xs-list li {
   display: flex;
-  gap: 22px;
-  align-items: baseline;
+  gap: 12px;
+  align-items: baseline;            /* canh theo baseline của chữ, không canh theo đỉnh */
   padding: 16px 0;
+  font-size: clamp(14px, 1.25vw, 17px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 .xs-list li:last-child {
   border-bottom: 0;
 }
-.xs-list li > span {
+.xs-dot {
+  --dot: 4px;                       /* kích thước chấm */
   flex: none;
-  color: var(--ag);
+  width: var(--dot);
+  height: var(--dot);
+  border-radius: 50%;
+  background: var(--ag);            /* hoặc màu bạn muốn */
+  /* đưa tâm chấm lên đúng giữa chiều cao chữ thường (khoảng 0.275em của Inter) */
+  transform: translateY(calc(var(--dot) / 2 - 0.275em));
 }
 .xs-list p {
-  font-size: clamp(14px, 1.25vw, 17px);
+  font-size: inherit;
   line-height: 1.65;
   color: #cfcfd4;
 }
@@ -1196,11 +1199,43 @@ a.cc-v:focus-visible {
   flex-direction: column;
   gap: clamp(28px, 5vh, 48px);
 }
+.xs-proj-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+}
+.xs-proj-role {
+  color: var(--mut);
+}
+.xs-proj-role::before {
+  content: "/";
+  margin-right: 12px;
+  color: var(--line);
+}
+.xs-proj-tags {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+.xs-proj-tags li {
+  padding: 2px 10px;
+  font-size: 9px;
+  border: 1px solid var(--line);
+  color: var(--mut);
+}
 .xs-proj {
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
   gap: 6vw;
   align-items: start;
+}
+.xs-proj + .xs-proj {
+  padding-top: clamp(28px, 5vh, 48px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 .xs-proj-head {
   display: flex;
@@ -1258,7 +1293,7 @@ a.cc-v:focus-visible {
   }
 }
 
-/* nút Prev / Next */
+/* Prev and Next buttons */
 .xs-nav {
   display: flex;
   align-items: center;
@@ -1542,8 +1577,39 @@ body:not(.loaded) .hero {
   box-shadow: 0 0 10px var(--ag);
   transform: scaleX(0);
   transform-origin: left;
+}/* Ngôi sao 3D ở mục Contact: nằm bên phải, căn giữa theo chiều dọc của section */
+.contact-star {
+  position: absolute;
+  right: 4vw;
+  top: 50%;
+  width: clamp(240px, 30vw, 460px);
+  aspect-ratio: 1;
+  transform: translateY(-50%);
+  z-index: 0; /* dưới chữ CTA để chữ luôn đọc được khi hai bên chạm nhau */
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+.contact-star.ready {
+  opacity: 1;
+}
+.contact-star canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
+/* màn hình hẹp: ngôi sao xuống dưới chữ, giữa trang */
+@media (max-width: 1180px) {
+  .contact-star {
+    position: relative;
+    right: auto;
+    top: auto;
+    transform: none;
+    margin: 40px auto 0;
+    width: min(70vw, 320px);
+  }
+}
 @media (max-width: 520px) {
   .ld-foot span:last-child {
     display: none;

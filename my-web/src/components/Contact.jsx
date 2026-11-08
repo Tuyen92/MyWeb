@@ -1,9 +1,12 @@
 import Reveal from './Reveal';
 import GlitchCycle from './GlitchCycle';
+import ContactStar from './ContactStar';
 
 export default function Contact({ names, fonts, onOpen }) {
   return (
     <section id="contact" className="contact">
+      {/* đặt trước chữ để chữ luôn nằm trên ngôi sao */}
+      {/* <ContactStar /> */}
       <Reveal as="h2" className="mono">( Contact )</Reveal>
       <Reveal effect="tv">
         <button

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { latestRole } from '../data/experience';
 
 const pad = (n) => String(n + 1).padStart(2, '0');
 
@@ -8,11 +9,11 @@ const pad = (n) => String(n + 1).padStart(2, '0');
  * Đóng bằng: nút X, phím Esc, hoặc click vào vùng tối phía trên.
  * `item` được giữ lại khi đóng để nội dung không biến mất giữa lúc trượt xuống.
  */
-export default function ExperienceSheet({ open, item, index, total, items, onClose, onNavigate }) {
+export default function ExperienceSheet({ open, item, index, total, onClose, onNavigate }) {
   const panelRef = useRef(null);
   const closeRef = useRef(null);
 
-  // Esc để đóng + Tab chỉ xoay vòng trong cửa sổ + khoá cuộn trang phía sau
+  // Esc to close sheet
   useEffect(() => {
     if (!open) return undefined;
 
@@ -30,7 +31,7 @@ export default function ExperienceSheet({ open, item, index, total, items, onClo
         return;
       }
       if (e.key !== 'Tab') return;
-      const nodes = panelRef.current?.querySelectorAll('button, [href], [tabindex="0"]');
+      const nodes = panelRef.current?.querySelectorAll('button:not([disabled]), [href], [tabindex="0"]');
       if (!nodes || !nodes.length) return;
       const first = nodes[0];
       const last = nodes[nodes.length - 1];
@@ -63,6 +64,20 @@ export default function ExperienceSheet({ open, item, index, total, items, onClo
 
   if (!item) return null;
 
+  // Mọi mục dùng cùng cấu trúc roles → projects → tasks (xem data/experience.js)
+  const roles = item.roles || [];
+  const hasProjects = roles.some((r) => r.projects?.length);
+  // Dàn phẳng: mỗi dự án mang theo vị trí của nó. Chỉ hiện nhãn vị trí khi có từ 2 vị trí
+  // trở lên (một vị trí thì đã có ở header nên không lặp lại).
+  const multiRole = roles.length > 1;
+  const projects = roles.flatMap((r) => (r.projects || []).map((p) => ({ ...p, role: r.title })));
+  const meta = [item.job_type, item.location].filter(Boolean).join(' · ');
+  // Đánh số 01/02/03 theo các mục thực sự có, không bị nhảy số khi thiếu mục
+  let sec = 0;
+  const nextSec = () => pad(sec++);
+  // P.01, P.02... đếm liên tục xuyên suốt các vị trí
+  let pj = 0;
+
   // portal ra body: thoát khỏi stacking context của section nên luôn nằm trên navbar / grain
   return createPortal(
     <div className={`xs ${open ? 'open' : ''}`} aria-hidden={!open}>
@@ -72,7 +87,7 @@ export default function ExperienceSheet({ open, item, index, total, items, onClo
         className="xs-panel"
         role="dialog"
         aria-modal="true"
-        aria-label={`${item.company} — ${item.role}`}
+        aria-label={`${item.company} — ${latestRole(item)}`}
       >
         <span className="xs-scan" aria-hidden="true" />
 
@@ -90,7 +105,7 @@ export default function ExperienceSheet({ open, item, index, total, items, onClo
               aria-label="Previous company"
             >
               <span aria-hidden="true">←</span>
-              <span className="xs-navtxt">Prev{index > 0 && items?.[index - 1] ? ` · ${items[index - 1].company}` : ''}</span>
+              <span className="xs-navtxt">Prev</span>
             </button>
             <button
               type="button"
@@ -99,11 +114,10 @@ export default function ExperienceSheet({ open, item, index, total, items, onClo
               disabled={index >= total - 1}
               aria-label="Next company"
             >
-              <span className="xs-navtxt">Next{index < total - 1 && items?.[index + 1] ? ` · ${items[index + 1].company}` : ''}</span>
+              <span className="xs-navtxt">Next</span>
               <span aria-hidden="true">→</span>
             </button>
           </div>
-          <span className="xs-live">Log open</span>
           <button ref={closeRef} type="button" className="xs-x" onClick={onClose} aria-label="Close">
             <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
               <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="square" />
@@ -124,11 +138,11 @@ export default function ExperienceSheet({ open, item, index, total, items, onClo
                   {item.company}
                 </h3>
                 <p className="xs-role xs-in" style={{ '--i': 2 }}>
-                  {item.role}
+                  {latestRole(item)}
                 </p>
-                {item.location && (
+                {meta && (
                   <small className="mono xs-loc xs-in" style={{ '--i': 3 }}>
-                    {item.location}
+                    {meta}
                   </small>
                 )}
               </header>
@@ -136,35 +150,47 @@ export default function ExperienceSheet({ open, item, index, total, items, onClo
               {item.summary && (
                 <section className="xs-sec xs-in" style={{ '--i': 3 }}>
                   <h4 className="mono xs-label">
-                    <i>01</i>Overview
+                    <i>{nextSec()}</i>Overview
                   </h4>
                   <p className="xs-sum">{item.summary}</p>
                 </section>
               )}
             </div>
 
-            {/* What I did: full ngang, chia theo dự án */}
-            {item.projects?.length > 0 && (
+            {/* What I did: full ngang, nhóm theo vị trí → dự án */}
+            {hasProjects && (
               <section className="xs-sec xs-in" style={{ '--i': 4 }}>
                 <h4 className="mono xs-label">
-                  <i>02</i>What I did
+                  <i>{nextSec()}</i>What I did
                 </h4>
                 <div className="xs-projects">
-                  {item.projects.map((pj, n) => (
-                    <article className="xs-proj" key={pj.name}>
+                  {projects.map((p) => (
+                    <article className="xs-proj" key={`${p.role}-${p.name}`}>
                       <header className="xs-proj-head">
-                        <span className="mono xs-proj-n">P.{pad(n)}</span>
-                        <h5>{pj.name}</h5>
-                        {pj.desc && <p>{pj.desc}</p>}
+                        <div className="xs-proj-meta">
+                          <span className="mono xs-proj-n">P.{pad(pj++)}</span>
+                          {multiRole && <span className="mono xs-proj-role">{p.role}</span>}
+                        </div>
+                        <h5>{p.name}</h5>
+                        {p.desc && <p>{p.desc}</p>}
+                        {p.tech?.length > 0 && (
+                          <ul className="xs-proj-tags">
+                            {p.tech.map((t) => (
+                              <li key={t} className="mono">
+                                {t}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
                       </header>
-                      <ol className="xs-list">
-                        {pj.tasks.map((t, k) => (
-                          <li key={t}>
-                            <span className="mono">{pad(k)}</span>
+                      <ul className="xs-list">
+                        {p.tasks.map((t, k) => (
+                          <li key={k}>
+                            <span className="xs-dot" aria-hidden="true" />
                             <p>{t}</p>
                           </li>
                         ))}
-                      </ol>
+                      </ul>
                     </article>
                   ))}
                 </div>
@@ -175,7 +201,7 @@ export default function ExperienceSheet({ open, item, index, total, items, onClo
             {item.tech?.length > 0 && (
               <section className="xs-sec xs-in" style={{ '--i': 5 }}>
                 <h4 className="mono xs-label">
-                  <i>03</i>Tech
+                  <i>{nextSec()}</i>Tech
                 </h4>
                 <ul className="xs-tags">
                   {item.tech.map((t) => (
@@ -189,9 +215,7 @@ export default function ExperienceSheet({ open, item, index, total, items, onClo
           </div>
         </div>
 
-        <div className="xs-foot mono">
-          <span className="xs-hint">Esc to close</span>
-        </div>
+        <div className="xs-foot mono" />
       </div>
     </div>,
     document.body
