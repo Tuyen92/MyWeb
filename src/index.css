@@ -1577,37 +1577,66 @@ body:not(.loaded) .hero {
   box-shadow: 0 0 10px var(--ag);
   transform: scaleX(0);
   transform-origin: left;
-}/* Ngôi sao 3D ở mục Contact: nằm bên phải, căn giữa theo chiều dọc của section */
-.contact-star {
+}/* Chòm sao Bảo Bình ở mục Contact: bên phải, căn giữa theo chiều dọc của section */
+.contact-sky {
   position: absolute;
-  right: 4vw;
+  right: 3vw;
   top: 50%;
-  width: clamp(240px, 30vw, 460px);
-  aspect-ratio: 1;
+  width: clamp(280px, 42vw, 640px);
+  aspect-ratio: 800 / 430;
   transform: translateY(-50%);
-  z-index: 0; /* dưới chữ CTA để chữ luôn đọc được khi hai bên chạm nhau */
+  z-index: 0; /* dưới chữ CTA */
   pointer-events: none;
-  opacity: 0;
-  transition: opacity 1.2s ease;
 }
-.contact-star.ready {
-  opacity: 1;
-}
-.contact-star canvas {
+.contact-sky svg {
   display: block;
   width: 100%;
   height: 100%;
+  overflow: visible;
+}
+.sky-star {
+  fill: #fff;
+  opacity: 0.8;
+  animation: var(--kf, sky-a) var(--dur, 14s) ease-in-out var(--delay, 0s) infinite;
+}
+.sky-v0 { --kf: sky-a; }
+.sky-v1 { --kf: sky-b; }
+.sky-v2 { --kf: sky-c; }
+
+/* 3 kiểu chớp lệch nhịp, đều chuyển rất chậm và mượt: mờ dần rồi sáng lên từ từ */
+@keyframes sky-a {
+  0%, 100% { opacity: 1; }
+  25% { opacity: var(--min); }
+  45% { opacity: 0.75; }
+  70% { opacity: 0.25; }
+}
+@keyframes sky-b {
+  0%, 100% { opacity: 0.3; }
+  20% { opacity: 1; }
+  40% { opacity: var(--min); }
+  65% { opacity: 0.8; }
+  85% { opacity: 0.15; }
+}
+@keyframes sky-c {
+  0%, 100% { opacity: var(--min); }
+  30% { opacity: 0.9; }
+  50% { opacity: 0.3; }
+  75% { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sky-star { animation: none; }
+  .sky-star { opacity: 0.85; }
 }
 
-/* màn hình hẹp: ngôi sao xuống dưới chữ, giữa trang */
+/* màn hình hẹp: chòm sao xuống dưới chữ */
 @media (max-width: 1180px) {
-  .contact-star {
+  .contact-sky {
     position: relative;
     right: auto;
     top: auto;
     transform: none;
-    margin: 40px auto 0;
-    width: min(70vw, 320px);
+    margin: 48px auto 0;
+    width: min(90vw, 520px);
   }
 }
 @media (max-width: 520px) {
