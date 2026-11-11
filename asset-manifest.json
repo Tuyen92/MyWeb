@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/MyWeb/static/css/main.8efbb533.css",
+    "main.js": "/MyWeb/static/js/main.414ceff6.js",
+    "static/media/about-ufo.webp": "/MyWeb/static/media/about-ufo.2bef09888eef306b988c.webp",
+    "static/media/about-blackhole.webp": "/MyWeb/static/media/about-blackhole.4cb188b6d8d554f44eab.webp",
+    "index.html": "/MyWeb/index.html",
+    "main.8efbb533.css.map": "/MyWeb/static/css/main.8efbb533.css.map",
+    "main.414ceff6.js.map": "/MyWeb/static/js/main.414ceff6.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8efbb533.css",
+    "static/js/main.414ceff6.js"
+  ]
+}
