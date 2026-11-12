@@ -10,12 +10,7 @@ const MESSAGES = [
   [1.0, 'Signal acquired'],
 ];
 
-/**
- * Màn hình chờ: sao neutron (pulsar) với hai tia phát xoay như đèn hải đăng.
- * - `done / total`: số việc nền đã xong (font, cảnh 3D, ảnh)
- * - phần trăm hiển thị chạy mượt tới giá trị thật; chỉ chạm 100% khi mọi việc xong VÀ đủ MIN_MS
- * - chạm 100% thì gọi `onComplete`; App đặt `loaded` → loader loé sáng rồi mờ đi và tự gỡ khỏi DOM
- */
+
 export default function Loader({ done, total, loaded, onComplete }) {
   const pctRef = useRef(null);
   const barRef = useRef(null);
@@ -43,7 +38,7 @@ export default function Loader({ done, total, loaded, onComplete }) {
       const time = Math.min(1, (now - t0) / MIN_MS);
       const target = Math.min(time, 0.08 + work * 0.92);
 
-      v += (target - v) * (1 - Math.exp(-dt * 5)); // tiến mượt tới mục tiêu
+      v += (target - v) * (1 - Math.exp(-dt * 5));
       if (target >= 1 && v > 0.995) v = 1;
 
       if (pctRef.current) pctRef.current.textContent = `${String(Math.round(v * 100)).padStart(3, '0')}%`;
@@ -60,7 +55,7 @@ export default function Loader({ done, total, loaded, onComplete }) {
 
       if (v >= 1 && !fired) {
         fired = true;
-        setTimeout(() => cbRef.current?.(), 350); // dừng một nhịp ở 100% cho đẹp
+        setTimeout(() => cbRef.current?.(), 350); // pause a moment at 100%
         return;
       }
       raf = requestAnimationFrame(tick);
@@ -69,7 +64,6 @@ export default function Loader({ done, total, loaded, onComplete }) {
     return () => cancelAnimationFrame(raf);
   }, [total]);
 
-  // đã mờ hẳn thì gỡ khỏi DOM
   useEffect(() => {
     if (!loaded) return undefined;
     const t = setTimeout(() => setGone(true), EXIT_MS);
@@ -81,7 +75,6 @@ export default function Loader({ done, total, loaded, onComplete }) {
   return (
     <div className={`ld ${loaded ? 'out' : ''}`} role="status" aria-label="Loading">
       <div className="ld-bar mono">
-        <span>FIG.00</span>
         <span className="ld-live">Acquiring signal</span>
       </div>
 
@@ -96,7 +89,7 @@ export default function Loader({ done, total, loaded, onComplete }) {
           </div>
           <i className="ld-core" />
         </div>
-        <p className="ld-name mono">PSR · Neutron Star</p>
+        <p className="ld-name mono">a Neutron Star</p>
       </div>
 
       <div className="ld-bottom">
@@ -104,9 +97,6 @@ export default function Loader({ done, total, loaded, onComplete }) {
           <span className="mono ld-msg" ref={msgRef}>
             {MESSAGES[0][1]}
           </span>
-          <b className="ld-pct" ref={pctRef}>
-            000%
-          </b>
         </div>
         <div className="ld-track">
           <i ref={barRef} />
@@ -114,8 +104,8 @@ export default function Loader({ done, total, loaded, onComplete }) {
       </div>
 
       <div className="ld-foot mono">
-        <span>Spin 716 Hz</span>
-        <span>Density 4×10¹⁷ kg/m³</span>
+        <span>Tuyen Nguyen</span>
+        <span>HCMC, Viet Nam</span>
       </div>
     </div>
   );

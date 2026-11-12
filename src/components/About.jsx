@@ -2,7 +2,7 @@ import Reveal from './Reveal';
 import blackhole from '../assets/about-blackhole.webp';
 import ufo from '../assets/about-ufo.webp';
 
-// Ảnh minh hoạ cho phần About (phong cách retro-futuristic: khung HUD, scanline, nhãn mono)
+// Pics
 const FIGS = [
   {
     src: blackhole,
@@ -32,7 +32,9 @@ export default function About() {
       <Reveal as="h2" className="mono">( About )</Reveal>
       <div className="about-row">
         <Reveal as="p" effect="tv" delay={100} className="intro-txt">
-        Xin Chào, I’m Tuyen Nguyen Le aka Sterling Nguyen. I'm a Software Developer with 4 years of experience. I'm willing to learn new things in tech and dedicate myself to contribute the IT domain. Accepting challenges and working hard are my keys.
+        Hi, I'm Tuyen Nguyen, also known as <i>Sterling</i>.<br />
+        A Software Engineer with 4 years of experience, specializing in Python.<br />
+        Always curious. Always learning. Always building.
         </Reveal>
 
         <div className="about-figs">

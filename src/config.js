@@ -4,9 +4,9 @@ const MYGIT = 'https://github.com/Tuyen92';
 const MYLINKEDIN = 'https://www.linkedin.com/in/tuyenguyenle/';
 
 export const CONFIG = {
-  text: 'STERLING',        // chữ 3D (dùng \n để xuống dòng)
-  fontStyle: '700',        // vd: '700', '900'
-  fontFamily: '"Unbounded", sans-serif', // font Y2K (hỗ trợ tiếng Việt)
+  text: 'STERLING',        // 3D text
+  fontStyle: '700',
+  fontFamily: '"Unbounded", sans-serif', // font Y2K
   puff: 22,                // độ phồng của chrome (lớn = nổi khối mạnh)
   fatten: 0,               // làm nét chữ dày thêm (px)
   skew: 0,                 // độ nghiêng chữ (vd 0.18)
@@ -32,7 +32,7 @@ export const CONFIG = {
   ],
   email: EMAIL,
   phone: PHONE,
-  nav: ['Experience', 'About', 'Skills', 'Contact'],
+  nav: ['About', 'Experience', 'Skills', 'Contact'],
   role: ['Software Engineer'],
   place: ['Based in HCMC', 'Vietnam'],
   vertical: 'Seize Your Moment!',

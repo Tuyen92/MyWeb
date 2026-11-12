@@ -54,7 +54,18 @@ export default function Hero3D({ started = true, onReady }) {
       visW = visH * cam.aspect;
       root.scale.setScalar(Math.min((visW * (w > 800 ? 0.5 : 0.8)) / tw, (visH * 0.5) / th));
     };
-    window.addEventListener('resize', fit);
+    // mobile: thanh địa chỉ co giãn khi cuộn chỉ đổi chiều cao vài chục px -> bỏ qua để scene không giật
+    let lastW = window.innerWidth;
+    let lastH = window.innerHeight;
+    const onResize = () => {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      if (w === lastW && Math.abs(h - lastH) < 160) return;
+      lastW = w;
+      lastH = h;
+      fit();
+    };
+    window.addEventListener('resize', onResize);
 
     buildText(CONFIG)
       .then((r) => {
@@ -111,7 +122,7 @@ export default function Hero3D({ started = true, onReady }) {
     return () => {
       dead = true;
       cancelAnimationFrame(raf);
-      window.removeEventListener('resize', fit);
+      window.removeEventListener('resize', onResize);
       renderer.dispose();
     };
   }, []);
