@@ -1,39 +1,25 @@
-// Kinh nghiệm làm việc, xếp từ mới nhất đến cũ nhất.
-// Mọi mục dùng CÙNG MỘT cấu trúc để cửa sổ chi tiết (ExperienceSheet) hiển thị đồng bộ:
-//
-//   period, company, location, job_type, summary, tech[]
-//   roles: [                       // vị trí mới nhất đứng đầu
-//     {
-//       title,                     // tên vị trí
-//       period,                    // (tuỳ chọn) thời gian riêng của vị trí
-//       projects: [
-//         { name, desc, tech[] (tuỳ chọn), tasks: [ ... ] }
-//       ],
-//     },
-//   ]
-//
-// Quy ước viết: tiếng Anh, mỗi task là MỘT câu hoàn chỉnh, bắt đầu bằng động từ quá khứ.
-// Chỉ có 1 vị trí thì cửa sổ không hiện thanh vị trí; có từ 2 vị trí trở lên thì hiện thanh phân nhóm.
-// Danh sách bên ngoài lấy vị trí đầu tiên (roles[0]) và 3 công nghệ đầu của `tech`.
-
 export const EXPERIENCE = [
   {
     period: '10/2025 – Now',
     company: 'FPT SOFTWARE',
     location: 'Ho Chi Minh City, Vietnam',
     job_type: 'Full-time',
-    summary:
-      'Developing and maintaining Python backend services and plugins for FPT Software customers.',
-    tech: ['Python', 'Pandas', 'MATLAB', 'Matplotlib'],
+    tech: ['Python', 'Pandas', 'Matplotlib', 'MATLAB'],
+    // Thành tích (tuỳ chọn). Mỗi mục: chuỗi, hoặc { title, desc, date }. Bỏ trống/xoá thì mục Achievements tự ẩn.
+    achievements: [
+      {
+        title: 'Certificate Top Performer - GSI GROUP LLC',
+        date: '2024',
+      },
+    ],
     roles: [
       {
         title: 'Software Engineer',
         projects: [
           {
             name: 'GEVernova Tunning & Operability',
-            // TODO: sửa lại mô tả cho đúng với dự án thật
-            desc: 'Python plugins for data extraction, calculation and report generation on simulation data.',
-            tech: ['Python', 'Pandas', 'MATLAB'],
+            desc: 'Develop various plugins to automate the process of handling simulation data for wind turbine design and evaluation.',
+            tech: ['Python', 'Pandas', 'Matplotlib', 'MATLAB'],
             tasks: [
               'Developed plugin workflows for data extraction, MATLAB-based calculations using Pandas, automated Matplotlib/Excel report generation, and production readiness support.',
               'Fixed bugs and implemented unit tests for all plugins using GitHub Copilot.',
@@ -53,15 +39,15 @@ export const EXPERIENCE = [
     job_type: 'Full-time',
     summary:
       'Built Allplan desktop add-ons and the Piledesigner web front-end. Started as a junior developer on the Automation-Hub reporting tools.',
-    tech: ['Python', 'TypeScript', 'React', 'Allplan', 'JSON', 'Odoo', 'MariaDB'],
+    tech: ['Python', 'FastAPI', 'Flask', 'TypeScript', 'React', 'AllplanAPI', 'Odoo', 'MariaDB'],
     roles: [
       {
         title: 'Software Developer',
         projects: [
           {
             name: 'Schöck Tronsole',
-            desc: 'Allplan desktop add-on for placing and adjusting product geometry.',
-            tech: ['Allplan'],
+            desc: 'Allplan add-on for stair panel placement and adjustment..',
+            tech: ['AllplanAPI', 'Python'],
             tasks: [
               'Implemented user-selected placement points and updated geometry based on product type.',
               'Implemented handlers that allow users to adjust the geometry, position, and direction of the objects.',
@@ -69,8 +55,8 @@ export const EXPERIENCE = [
           },
           {
             name: 'Critical Zone',
-            desc: 'Allplan desktop add-on that calculates the critical zone at wall connections.',
-            tech: ['Allplan'],
+            desc: 'Allplan add-on for defining critical zones on a slab.',
+            tech: ['AllplanAPI', 'Python', ],
             tasks: [
               'Implemented a user-selected placement point, detecting perpendicular wall connections and calculating the center of critical zone.',
               'Designed and developed a UI palette and handled its data validation.',
@@ -78,8 +64,8 @@ export const EXPERIENCE = [
           },
           {
             name: 'Tebea Balcony Connector',
-            desc: 'Allplan desktop add-on for configuring balcony connector products in 3D.',
-            tech: ['Allplan', 'JSON', 'Excel'],
+            desc: 'Allplan add-on for configuring balcony connector products in 3D.',
+            tech: ['AllplanAPI', 'Python'],
             tasks: [
               'Designed a JSON-based data structure to store detailed product information extracted from an Excel file.',
               'Developed a UI palette and handled constraints for users choosing product parameters.',
@@ -89,8 +75,8 @@ export const EXPERIENCE = [
           },
           {
             name: 'Piledesigner',
-            desc: 'Web application where I served as the main front-end developer.',
-            tech: ['TypeScript', 'React'],
+            desc: 'Web application for soil layer analysis and calculations.',
+            tech: ['TypeScript', 'React', 'RestAPI'],
             tasks: [
               'Served as the main front-end developer, building applications with TypeScript and React.',
               'Re-designed the UI and improved the UX for the Login, Register, Workspace, Account, and Projects pages.',
@@ -107,8 +93,8 @@ export const EXPERIENCE = [
         projects: [
           {
             name: 'Odoo Timesheet Reports',
-            desc: 'Part of the Automation-Hub reporting tools.',
-            tech: ['Odoo', 'MariaDB'],
+            desc: 'Developed APIs to process data from Odoo and generate visualizations.',
+            tech: ['Odoo', 'Python', 'FastAPI', 'MariaDB'],
             tasks: [
               'Designed and created a database schema in MariaDB to store raw data and transformed data.',
               'Developed FastAPI APIs to process Odoo Timesheet data and generate report metrics.'
@@ -121,8 +107,8 @@ export const EXPERIENCE = [
         projects: [
           {
             name: 'CV ETL',
-            desc: 'Part of the Automation-Hub reporting tools.',
-            tech: ['FastAPI', 'MariaDB'],
+            desc: 'Web application for CV scanning and evaluation..',
+            tech: ['FastAPI', 'Python', 'FastAPI', 'MariaDB'],
             tasks: [
               'Designed and created a database schema in MariaDB to store applicant data and CV logs.',
               'Developed FastAPI endpoints to process applicant data from ChatGPT and log CV evaluation workflows.'
@@ -135,8 +121,8 @@ export const EXPERIENCE = [
         projects: [
           {
             name: 'Internal Translation Platform',
-            desc: 'Part of the Automation-Hub reporting tools.',
-            tech: ['Flask', 'MariaDB'],
+            desc: 'Web application for translation in the construction industry.',
+            tech: ['Python', 'Flask', 'MariaDB'],
             tasks: [
               'Designed and created a database schema in MariaDB to store construction glossaries in English, German, and Vietnamese.',
               'Developed a Flask application integrating DeepL, Google Translate, and LibreTranslate, with a workflow to replace words and refine translation.'
@@ -149,8 +135,8 @@ export const EXPERIENCE = [
         projects: [
           {
             name: 'Assessment web application',
-            desc: 'Part of the Automation-Hub reporting tools.',
-            tech: ['Flask', 'MariaDB'],
+            desc: 'Web application for candidate assessment and evaluation.',
+            tech: ['Python','Flask', 'MariaDB', 'Moodle', 'Odoo'],
             tasks: [
               'Designed and created a database schema in MariaDB to store quiz data, candidate information, assessments, and results.',
               'Developed a Flask application integrating Moodle and Odoo APIs to retrieve data and process technical and MBTI assessments.'
@@ -162,7 +148,7 @@ export const EXPERIENCE = [
   },
   {
     period: '09/2022 – 11/2023',
-    company: 'FINTECT DRACO CORPORATION',
+    company: 'FINTECH DRACO CORPORATION',
     location: 'Ho Chi Minh City, Vietnam',
     job_type: 'Full-time',
     summary:
@@ -174,8 +160,8 @@ export const EXPERIENCE = [
         projects: [
           {
             name: 'Multi E-com',
-            desc: 'Business modules for an enterprise ERP system.',
-            tech: ['Python', 'ERPNext'],
+            desc: 'Integrated an e-commerce platform with ERPNext and synchronized data between systems.',
+            tech: ['Python', 'RestAPI', 'ERPNext'],
             tasks: [
               'Customized ERPNext modules to store seller data, including seller information, products, warehouse, orders, invoices, and shipping.',
               'Integrated Tiki and TikTok e-commerce APIs with ERPNext.',
@@ -188,7 +174,7 @@ export const EXPERIENCE = [
 
           {
             name: 'Thai Son Driving Training Center’s LMS',
-            desc: 'Business modules for an enterprise ERP system.',
+            desc: 'Customized ERPNext into a learning management system for driving training.',
             tech: ['Python', 'ERPNext'],
             tasks: [
               'Customized ERPNext modules to store data, including student information, courses, and assessments.',
@@ -202,6 +188,6 @@ export const EXPERIENCE = [
   },
 ];
 
-// Hàm dùng chung để danh sách và cửa sổ chi tiết luôn lấy cùng một nguồn
+// Common function use to get data in same source
 export const latestRole = (e) => e.roles[0].title;
 export const stackOf = (e) => e.tech.slice(0, 3).join(' · ');

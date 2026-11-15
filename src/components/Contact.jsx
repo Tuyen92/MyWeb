@@ -1,24 +1,12 @@
 import Reveal from './Reveal';
-import GlitchCycle from './GlitchCycle';
 import ContactConstellation from './ContactConstellation';
 
-export default function Contact({ names, fonts, onOpen }) {
+// Mục Contact chỉ còn nhãn "( Contact )" + chòm sao; thẻ liên hệ tự hiện khi cuộn tới (xem App.js)
+export default function Contact() {
   return (
     <section id="contact" className="contact">
       <ContactConstellation />
       <Reveal as="h2" className="mono">( Contact )</Reveal>
-      <Reveal effect="tv">
-        <button
-          type="button"
-          className="cta"
-          onClick={onOpen}
-          aria-label={`Reach out to ${names[0]}`}
-        >
-          <span aria-hidden="true">
-            Reach out to <GlitchCycle words={names} fonts={fonts} className="cta-name" />
-          </span>
-        </button>
-      </Reveal>
     </section>
   );
 }

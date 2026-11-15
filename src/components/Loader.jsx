@@ -104,7 +104,7 @@ export default function Loader({ done, total, loaded, onComplete }) {
       </div>
 
       <div className="ld-foot mono">
-        <span>Tuyen Nguyen</span>
+        <span>© 2026 Tuyen Nguyen</span>
         <span>HCMC, Viet Nam</span>
       </div>
     </div>

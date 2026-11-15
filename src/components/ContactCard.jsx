@@ -3,8 +3,10 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 const KEEP = 80; // số px tối thiểu của thẻ phải còn nằm trong màn hình
 
 /** Thẻ visit nổi trên trang: draggable, close with  button or Esc */
-export default function ContactCard({ open, onClose, heading, items, avatar }) {
+export default function ContactCard({ open, onClose, heading, items, avatar, placement = 'center', onMove }) {
   const wrapRef = useRef(null);
+  const placementRef = useRef(placement);
+  placementRef.current = placement;
   const pos = useRef({ x: 0, y: 0 });
   const drag = useRef(null);
   const [dragging, setDragging] = useState(false);
@@ -21,13 +23,26 @@ export default function ContactCard({ open, onClose, heading, items, avatar }) {
     el.style.transform = `translate3d(${nx}px, ${ny}px, 0)`;
   }, []);
 
-  // Evertime open: place card in the middle of the screen
+  // Mỗi lần mở: đặt thẻ vào vị trí.
+  //  - 'center' (nút Contact trên navbar): giữa màn hình, sát đáy (như cũ)
+  //  - 'contact' (cuộn tới mục Contact): lệch trái, hơi thấp hơn giữa màn hình
   useEffect(() => {
     if (!open) return;
     const el = wrapRef.current;
     if (!el) return;
-    const x = (window.innerWidth - el.offsetWidth) / 2;
-    const y = window.innerHeight - el.offsetHeight - 20;
+    const w = el.offsetWidth;
+    const h = el.offsetHeight;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    let x;
+    let y;
+    if (placementRef.current === 'contact') {
+      x = Math.max(16, Math.min(vw * 0.063, vw - w - 16));
+      y = Math.max(16, Math.min(vh * 0.587 - h / 2, vh - h - 16)); // tâm thẻ ở ~59% chiều cao màn hình
+    } else {
+      x = (vw - w) / 2;
+      y = vh - h - 20;
+    }
     moveTo(x, y);
   }, [open, moveTo]);
 
@@ -57,6 +72,10 @@ export default function ContactCard({ open, onClose, heading, items, avatar }) {
   const onPointerMove = (e) => {
     if (!drag.current) return;
     moveTo(e.clientX - drag.current.dx, e.clientY - drag.current.dy);
+    if (!drag.current.moved) {
+      drag.current.moved = true;
+      onMove?.(); // đã kéo khỏi vị trí mặc định: báo cho App giữ thẻ lại
+    }
   };
 
   const endDrag = (e) => {
@@ -83,8 +102,7 @@ export default function ContactCard({ open, onClose, heading, items, avatar }) {
 
           {/* thanh trạng thái trên cùng (kiểu HUD) */}
           <div className="cc-bar mono">
-            <span>FIG.03</span>
-            <span className="cc-live">Channel open</span>
+            <span>CONTACT</span>
           </div>
 
           <button type="button" className="cc-x" onClick={onClose} aria-label="Close">
@@ -93,7 +111,7 @@ export default function ContactCard({ open, onClose, heading, items, avatar }) {
             </svg>
           </button>
 
-          <h3 className="cc-h3">{heading}</h3>
+          <h3 className="cc-h3">TUYEN NGUYEN</h3>
 
           <div className="cc-grid">
             {items.map((it, n) => (

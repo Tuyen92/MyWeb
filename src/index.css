@@ -109,6 +109,41 @@ canvas.dust {
 body.loaded canvas.dust {
   animation: fadein 3s 0.4s forwards;
 }
+/* ---------- Sao băng khi bấm vào chữ 3D ---------- */
+.shoot-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 7; /* trên nội dung hero, dưới navbar (10) */
+  pointer-events: none;
+  overflow: hidden;
+}
+.shoot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 2px;
+  border-radius: 2px;
+  transform-origin: 100% 50%; /* xoay quanh đầu sao */
+  opacity: 0;
+  will-change: transform, opacity;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(200, 215, 255, 0.55) 70%, #fff);
+}
+.shoot::after {
+  content: "";
+  position: absolute;
+  right: -3px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 8px 2px #fff, 0 0 22px 7px rgba(170, 195, 255, 0.7);
+}
+/* rê chuột lên chữ 3D → con trỏ dạng bấm được (Hero3D bật/tắt class này) */
+body.over-3d {
+  cursor: pointer;
+}
 canvas.gl {
   position: fixed;
   inset: 0;
@@ -198,8 +233,7 @@ nav a:hover {
   z-index: 5;
 }
 .hero .l1,
-.hero .l2,
-.hero .vt {
+.hero .l2 {
   position: absolute;
   color: var(--fg);
 }
@@ -226,23 +260,46 @@ nav a:hover {
   margin-top: 12px;
 }
 .vt {
-  right: 2.6vw;
-  bottom: 9vh;
+  position: fixed; /* cố định khi cuộn trang */
+  right: max(6px, 1vw); /* nằm sát mép phải, trong phần lề --pad nên không đè lên nội dung */
+  /* footer cao ~72px → chừa tối thiểu 108px để quote không chạm tới footer */
+  bottom: calc(max(9vh, 108px) + env(safe-area-inset-bottom, 0px));
+  z-index: 6;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 14px;
   color: var(--mut);
+  pointer-events: none; /* không chặn thao tác chuột phía dưới */
+  transition: opacity 1.2s ease 0.25s;
+}
+body:not(.loaded) .vt {
+  opacity: 0;
 }
 .vt i {
   width: 1px;
   height: 60px;
   background: var(--mut);
 }
-.vt span {
+.vt-text {
+  /* một hàng dọc duy nhất: quote — tác giả */
   writing-mode: vertical-rl;
   font-size: 10px;
+  line-height: 1.2; /* cột chữ dọc hẹp lại (mono mặc định line-height: 2) → chừa thêm khoảng trống cho nội dung */
   letter-spacing: 0.3em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: calc(100svh - 280px); /* quá dài thì cắt "…" thay vì tràn lên navbar */
+}
+.vt-quote {
+  color: var(--fg);
+}
+.vt-author {
+  margin-inline-start: 0.6em; /* khoảng cách giữa quote và tác giả */
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  color: var(--mut);
 }
 @media (max-width: 700px) {
   .vt {
@@ -261,6 +318,24 @@ section {
   padding: 16vh var(--pad);
   min-height: 80vh;
 }
+/* ---------- Cuộn theo từng mục (chỉ máy có chuột; điện thoại/cảm ứng vẫn cuộn tự do) ---------- */
+@media (hover: hover) and (pointer: fine) {
+  html {
+    scroll-snap-type: y mandatory;
+  }
+  .hero,
+  section {
+    scroll-snap-align: start;
+    scroll-snap-stop: always; /* mỗi nấc lăn chỉ sang đúng 1 mục, không lướt qua nhiều mục */
+  }
+  section {
+    min-height: 100vh;
+    min-height: 100svh; /* mỗi mục chiếm trọn màn hình */
+  }
+  footer {
+    scroll-snap-align: end; /* để vẫn cuộn xuống tới footer */
+  }
+}
 h2 {
   font-weight: 400;
   color: var(--mut);
@@ -269,7 +344,7 @@ h2 {
 .about p {
   font-family: "Unbounded", sans-serif;
   font-weight: 500;
-  font-size: clamp(26px, 3.4vw, 48px);
+  font-size: clamp(20px, 2.4vw, 34px);
   line-height: 1.3;
   background: linear-gradient(
     100deg,
@@ -541,13 +616,33 @@ h2 {
 .exp em {
   font-family: "Unbounded", sans-serif;
   font-weight: 700;
-  font-size: clamp(22px, 4.4vw, 64px);
+  font-size: clamp(18px, 3vw, 44px); /* cỡ chữ tên công ty (trước: clamp(22px, 4.4vw, 64px)) */
   line-height: 1.15;
+  /* chữ ánh bạc (gradient) giống chữ "Python" */
+  background: linear-gradient(100deg, #8c93a6, #fff 40%, #b9c2d8 70%, #8c93a6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none; /* tránh thừa hưởng text-shadow của .exp-row:hover (sẽ đè lên gradient) */
+  transition: filter 0.3s;
+}
+/* rê chuột / focus: như cũ — chữ chuyển màu sáng xanh nhạt + toả sáng (dùng drop-shadow vì chữ đang là gradient) */
+.exp-row:hover em,
+.exp-row:focus-visible em {
+  background: var(--ag);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 18px rgba(220, 230, 255, 0.6));
 }
 .exp-role {
+  /* nằm bên phải hàng, canh lề phải (trước đây là dòng tech stack) */
+  flex: none;
+  max-width: 30%;
   font-family: "Unbounded", sans-serif;
   font-weight: 500;
   font-size: clamp(12px, 1.3vw, 18px);
+  line-height: 1.3;
+  text-align: right;
   color: var(--mut);
 }
 @media (max-width: 700px) {
@@ -555,11 +650,16 @@ h2 {
     flex-direction: column;
     gap: 10px;
   }
+  .exp-role {
+    max-width: 100%;
+    text-align: left; /* điện thoại: các dòng xếp dọc nên canh trái */
+  }
 }
 .contact {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start; /* nhãn ( Contact ) nằm sát phía trên section */
+  padding-top: 10vh;
 }
 .cta {
   display: flex;
@@ -942,9 +1042,6 @@ footer {
   flex-direction: column;
   gap: 3px;
 }
-.cc-item:nth-child(even) {
-  padding-top: 22px;
-}
 .cc-l {
   font-family: "Michroma", "Inter", sans-serif;
   font-size: 9px;
@@ -1017,9 +1114,6 @@ a.cc-v:focus-visible {
   }
   .cc-grid {
     grid-template-columns: 1fr;
-  }
-  .cc-item:nth-child(even) {
-    padding-top: 0;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1164,21 +1258,34 @@ a.cc-v:focus-visible {
 .xs-body {
   display: flex;
   flex-direction: column;
-  gap: clamp(36px, 6vh, 64px);
+  gap: clamp(20px, 3.5vh, 36px);
   margin: 0 auto;
   padding: clamp(32px, 6vh, 72px) var(--pad) clamp(40px, 8vh, 90px);
 }
 .xs-top {
-  display: grid;
-  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-  gap: 4vw;
-  align-items: start; /* đồng bộ: Overview luôn ngang hàng với đầu khối tên công ty */
+  display: block;
 }
 .xs-head {
   display: flex;
+  justify-content: space-between;
+  align-items: flex-end; /* role + địa điểm canh đáy cùng dòng với tên công ty */
+  gap: 4vw;
+}
+.xs-head-l {
+  display: flex;
   flex-direction: column;
   gap: 14px;
-  align-self: start;
+  min-width: 0;
+}
+.xs-head-r {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 14px;
+  text-align: right; /* canh lề phải */
+  flex: none;
+  max-width: 40%;
+  padding-bottom: 0.6em;
 }
 .xs-company {
   font-family: "Unbounded", sans-serif;
@@ -1209,6 +1316,7 @@ a.cc-v:focus-visible {
   min-height: 0;
   padding: 0;
   z-index: auto;
+  scroll-snap-align: none; /* section trong sheet không tham gia snap của trang */
 }
 .xs-content {
   display: flex;
@@ -1302,7 +1410,7 @@ a.cc-v:focus-visible {
 .xs-proj {
   display: grid;
   grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
-  gap: 6vw;
+  gap: 4vw;
   align-items: start;
 }
 .xs-proj + .xs-proj {
@@ -1333,6 +1441,45 @@ a.cc-v:focus-visible {
 .xs-proj .xs-list li:first-child {
   padding-top: 0;
 }
+/* ---- Achievements ---- */
+.xs-ach {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.xs-ach li {
+  display: grid;
+  grid-template-columns: 4.5em minmax(0, 1fr) auto;
+  gap: 0 clamp(12px, 2vw, 28px);
+  align-items: baseline;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.xs-ach li:last-child {
+  border-bottom: 0;
+}
+.xs-ach-n {
+  color: var(--ag);
+}
+.xs-ach-t {
+  font-family: "Unbounded", sans-serif;
+  font-weight: 500;
+  font-size: clamp(14px, 1.4vw, 19px);
+  line-height: 1.4;
+  color: var(--fg);
+}
+.xs-ach-d {
+  margin-top: 6px;
+  font-size: clamp(13px, 1.15vw, 16px);
+  line-height: 1.65;
+  color: #9a9aa3;
+}
+.xs-ach-date {
+  color: var(--mut);
+  white-space: nowrap;
+  text-align: right;
+}
 .xs-tags {
   list-style: none;
   padding: 0;
@@ -1345,6 +1492,58 @@ a.cc-v:focus-visible {
   line-height: 2;
   border: 1px solid var(--line);
   color: var(--ag);
+}
+
+/* Tech dạng logo 3D: nghiêng theo con trỏ, nổi nhẹ (tag chữ vẫn dùng làm fallback) */
+.xs-tags--logos {
+  gap: clamp(14px, 2vw, 28px);
+  align-items: center;
+}
+.xs-tags .xs-logo {
+  padding: 0;
+  border: 0;
+  line-height: 0;
+  perspective: 700px;
+  cursor: default;
+  animation: xsFloat 5s ease-in-out var(--d, 0s) infinite;
+}
+.xs-logo-in {
+  display: block;
+  height: clamp(48px, 5.2vw, 76px);
+  width: auto;
+  max-width: 100%;
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.28s ease-out, filter 0.28s ease-out;
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.5));
+  will-change: transform;
+  user-select: none;
+}
+.xs-logo:hover .xs-logo-in {
+  transition-duration: 0.08s, 0.28s; /* bám theo con trỏ nhanh, trả về từ từ khi rời đi */
+  filter: drop-shadow(0 16px 20px rgba(130, 150, 255, 0.28));
+}
+@keyframes xsFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+@media (max-width: 860px) {
+  .xs-logo-in {
+    height: 44px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .xs-tags .xs-logo {
+    animation: none;
+  }
+  .xs-logo-in {
+    transition: none;
+    transform: none;
+  }
 }
 
 /* nội dung hiện lần lượt (trượt nhẹ lên); dùng animation để chạy lại khi đổi công ty */
@@ -1401,10 +1600,29 @@ a.cc-v:focus-visible {
 }
 
 @media (max-width: 860px) {
-  .xs-top,
   .xs-proj {
     grid-template-columns: 1fr;
     gap: 24px;
+  }
+  .xs-ach li {
+    grid-template-columns: 3.6em minmax(0, 1fr);
+  }
+  .xs-ach-date {
+    grid-column: 2;
+    text-align: left;
+    margin-top: 6px;
+  }
+  .xs-head {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 16px;
+  }
+  .xs-head-l {
+    align-self: stretch;
+  }
+  .xs-head-r {
+    max-width: 100%;
+    padding-bottom: 0;
   }
   .xs-hint,
   .xs-navtxt,
@@ -1478,7 +1696,7 @@ body:not(.loaded) .hero {
   border-bottom: 1px solid var(--line);
 }
 .ld-bar > span:first-child {
-  color: var(--ag);
+  color: #fff;
 }
 .ld-live::before {
   content: "";
@@ -1487,8 +1705,8 @@ body:not(.loaded) .hero {
   height: 5px;
   margin-right: 7px;
   border-radius: 50%;
-  background: var(--ag);
-  box-shadow: 0 0 8px var(--ag);
+  background: #fff;
+  box-shadow: 0 0 8px #fff;
   animation: figblink 1.6s steps(2, jump-none) infinite;
 }
 .ld-foot {
@@ -1625,7 +1843,7 @@ body:not(.loaded) .hero {
   margin-bottom: 14px;
 }
 .ld-msg {
-  color: var(--ag);
+  color: #fff;
 }
 .ld-pct {
   font-family: "Unbounded", sans-serif;
@@ -1645,8 +1863,8 @@ body:not(.loaded) .hero {
 .ld-track i {
   display: block;
   height: 100%;
-  background: var(--ag);
-  box-shadow: 0 0 10px var(--ag);
+  background: #fff;
+  box-shadow: 0 0 10px #fff;
   transform: scaleX(0);
   transform-origin: left;
 }/* Chòm sao Bảo Bình ở mục Contact: bên phải, căn giữa theo chiều dọc của section */
@@ -1739,7 +1957,7 @@ body:not(.loaded) .hero {
     padding: 13vh var(--pad);
   }
   .about p {
-    font-size: clamp(22px, 3.6vw, 34px);
+    font-size: clamp(18px, 2.8vw, 26px);
   }
   .cta {
     font-size: clamp(30px, 6.2vw, 50px);
@@ -1805,7 +2023,7 @@ body:not(.loaded) .hero {
     top: 26%;
   }
   .about p {
-    font-size: clamp(20px, 5.8vw, 26px);
+    font-size: clamp(16px, 4.6vw, 20px);
   }
   .about-figs {
     margin-top: 32px;

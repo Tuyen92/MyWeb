@@ -1,4 +1,4 @@
-export default function Hero({ role, place, vertical }) {
+export default function Hero({ role, place }) {
   return (
     <header className="hero">
       <div className="l1 mono">
@@ -12,10 +12,6 @@ export default function Hero({ role, place, vertical }) {
           <div key={r}>{r}</div>
         ))}
         <i />
-      </div>
-      <div className="vt">
-        <i />
-        <span className="mono">{vertical}</span>
       </div>
     </header>
   );

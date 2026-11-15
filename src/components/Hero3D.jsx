@@ -90,6 +90,41 @@ export default function Hero3D({ started = true, onReady }) {
       });
     fit();
 
+    // ---- Rê chuột lên vật thể 3D → đổi con trỏ (sao băng do ShootingStar xử lý, bấm ở đâu cũng bắn) ----
+    // canvas có pointer-events: none nên tự kiểm tra: toạ độ chuột nằm trong khung chiếu của chữ, hoặc trúng vòng elip
+    const box = new THREE.Box3();
+    const corner = new THREE.Vector3();
+    const ray = new THREE.Raycaster();
+    const ndc = new THREE.Vector2();
+    const overObject = (cx, cy) => {
+      if (!textHolder.children.length) return false;
+      const rect = cv.getBoundingClientRect();
+      box.setFromObject(textHolder);
+      if (box.isEmpty()) return false;
+      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+      for (let i = 0; i < 8; i++) {
+        corner.set(i & 1 ? box.max.x : box.min.x, i & 2 ? box.max.y : box.min.y, i & 4 ? box.max.z : box.min.z).project(cam);
+        const x = ((corner.x + 1) / 2) * rect.width + rect.left;
+        const y = ((1 - corner.y) / 2) * rect.height + rect.top;
+        minX = Math.min(minX, x); maxX = Math.max(maxX, x);
+        minY = Math.min(minY, y); maxY = Math.max(maxY, y);
+      }
+      if (cx >= minX && cx <= maxX && cy >= minY && cy <= maxY) return true;
+      ndc.set(((cx - rect.left) / rect.width) * 2 - 1, -((cy - rect.top) / rect.height) * 2 + 1);
+      ray.setFromCamera(ndc, cam);
+      return ray.intersectObject(root, true).length > 0;
+    };
+    // bỏ qua khi bấm vào link / nút / navbar / thẻ liên hệ / cửa sổ Experience
+    const ignored = (el) =>
+      !!(el && el.closest && el.closest('a, button, input, textarea, nav, [role="dialog"], .cc, .xs'));
+    const onObject = (e) =>
+      startedRef.current &&
+      window.scrollY < window.innerHeight * 0.5 && // chỉ khi đang ở phần đầu trang (canvas còn hiện)
+      !ignored(e.target) &&
+      overObject(e.clientX, e.clientY);
+    const onMove = (e) => document.body.classList.toggle('over-3d', onObject(e));
+    window.addEventListener('pointermove', onMove, { passive: true });
+
     let t0 = performance.now();
     let sx = 0, sy = 0;
     const loop = () => {
@@ -123,6 +158,8 @@ export default function Hero3D({ started = true, onReady }) {
       dead = true;
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', onResize);
+      window.removeEventListener('pointermove', onMove);
+      document.body.classList.remove('over-3d');
       renderer.dispose();
     };
   }, []);

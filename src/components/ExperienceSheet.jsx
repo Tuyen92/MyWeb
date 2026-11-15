@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { latestRole } from '../data/experience';
+import TechLogos from './TechLogos';
 
 const pad = (n) => String(n + 1).padStart(2, '0');
 
@@ -71,6 +72,8 @@ export default function ExperienceSheet({ open, item, index, total, onClose, onN
   // trở lên (một vị trí thì đã có ở header nên không lặp lại).
   const multiRole = roles.length > 1;
   const projects = roles.flatMap((r) => (r.projects || []).map((p) => ({ ...p, role: r.title })));
+  // Achievements: chấp nhận cả chuỗi lẫn object { title, desc, date }
+  const achievements = (item.achievements || []).map((a) => (typeof a === 'string' ? { title: a } : a));
   const meta = [item.job_type, item.location].filter(Boolean).join(' · ');
   // Đánh số 01/02/03 theo các mục thực sự có, không bị nhảy số khi thiếu mục
   let sec = 0;
@@ -131,30 +134,25 @@ export default function ExperienceSheet({ open, item, index, total, onClose, onN
             {/* hàng trên: nhận diện công ty (trái) + overview (phải) */}
             <div className="xs-top">
               <header className="xs-head">
-                <small className="mono xs-period xs-in" style={{ '--i': 0 }}>
-                  {item.period}
-                </small>
-                <h3 className="xs-company xs-in" style={{ '--i': 1 }}>
-                  {item.company}
-                </h3>
-                <p className="xs-role xs-in" style={{ '--i': 2 }}>
-                  {latestRole(item)}
-                </p>
-                {meta && (
-                  <small className="mono xs-loc xs-in" style={{ '--i': 3 }}>
-                    {meta}
+                <div className="xs-head-l">
+                  <small className="mono xs-period xs-in" style={{ '--i': 0 }}>
+                    {item.period}
                   </small>
-                )}
+                  <h3 className="xs-company xs-in" style={{ '--i': 1 }}>
+                    {item.company}
+                  </h3>
+                </div>
+                <div className="xs-head-r">
+                  <p className="xs-role xs-in" style={{ '--i': 2 }}>
+                    {latestRole(item)}
+                  </p>
+                  {meta && (
+                    <small className="mono xs-loc xs-in" style={{ '--i': 3 }}>
+                      {meta}
+                    </small>
+                  )}
+                </div>
               </header>
-
-              {item.summary && (
-                <section className="xs-sec xs-in" style={{ '--i': 3 }}>
-                  <h4 className="mono xs-label">
-                    <i>{nextSec()}</i>Overview
-                  </h4>
-                  <p className="xs-sum">{item.summary}</p>
-                </section>
-              )}
             </div>
 
             {/* What I did: full ngang, nhóm theo vị trí → dự án */}
@@ -197,21 +195,42 @@ export default function ExperienceSheet({ open, item, index, total, onClose, onN
               </section>
             )}
 
-            {/* Tech: full ngang */}
-            {item.tech?.length > 0 && (
+            {/* Achievements */}
+            {achievements.length > 0 && (
               <section className="xs-sec xs-in" style={{ '--i': 5 }}>
                 <h4 className="mono xs-label">
-                  <i>{nextSec()}</i>Tech
+                  <i>{nextSec()}</i>Achievements
                 </h4>
-                <ul className="xs-tags">
-                  {item.tech.map((t) => (
-                    <li key={t} className="mono">
-                      {t}
+                <ul className="xs-ach">
+                  {achievements.map((a, k) => (
+                    <li key={`${a.title}-${k}`}>
+                      <span className="mono xs-ach-n">✦</span>
+                      <div className="xs-ach-body">
+                        <h5 className="xs-ach-t">{a.title}</h5>
+                        {a.desc && <p className="xs-ach-d">{a.desc}</p>}
+                      </div>
+                      {a.date && <span className="mono xs-ach-date">{a.date}</span>}
                     </li>
                   ))}
                 </ul>
               </section>
             )}
+
+            {/* Tech: logo 3D (xem data/techLogos.js) */}
+            {item.tech?.length > 0 && (
+                <section className="xs-sec xs-in" style={{ '--i': 6 }}>
+                  <h4 className="mono xs-label">
+                    <i>{nextSec()}</i>Tech
+                  </h4>
+                  <ul className="xs-tags">
+                    {item.tech.map((t) => (
+                      <li key={t} className="mono">
+                        {t}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
           </div>
         </div>
 

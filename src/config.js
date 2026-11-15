@@ -2,6 +2,7 @@ const EMAIL = 'nguyenletuyen9201@gmail.com';
 const PHONE = '+84 773 946 632';
 const MYGIT = 'https://github.com/Tuyen92';
 const MYLINKEDIN = 'https://www.linkedin.com/in/tuyenguyenle/';
+const MYINSTAGRAM = 'https://www.instagram.com/YOUR_USERNAME/'; // TODO: thay bằng link Instagram của bạn
 
 export const CONFIG = {
   text: 'STERLING',        // 3D text
@@ -35,7 +36,6 @@ export const CONFIG = {
   nav: ['About', 'Experience', 'Skills', 'Contact'],
   role: ['Software Engineer'],
   place: ['Based in HCMC', 'Vietnam'],
-  vertical: 'Seize Your Moment!',
 
   // Contact Card
   contact: {
@@ -49,6 +49,7 @@ export const CONFIG = {
         lines: [
           { text: 'GitHub', href: MYGIT },
           { text: 'LinkedIn', href: MYLINKEDIN },
+          { text: 'Instagram', href: MYINSTAGRAM },
         ],
       },
     ],

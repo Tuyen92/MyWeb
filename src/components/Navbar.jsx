@@ -57,7 +57,7 @@ export default function Navbar({ name, links, onContact }) {
             </a>
           )
         )}
-        <span className="dot" />
+        <span>✦</span>
       </div>
     </nav>
   );

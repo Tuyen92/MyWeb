@@ -34,7 +34,7 @@ export default function About() {
         <Reveal as="p" effect="tv" delay={100} className="intro-txt">
         Hi, I'm Tuyen Nguyen, also known as <i>Sterling</i>.<br />
         A Software Engineer with 4 years of experience, specializing in Python.<br />
-        Always curious. Always learning. Always building.
+        Always learning. Always building.
         </Reveal>
 
         <div className="about-figs">
