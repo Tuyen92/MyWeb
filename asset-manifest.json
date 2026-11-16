@@ -1,15 +1,16 @@
 {
   "files": {
-    "main.css": "/MyWeb/static/css/main.22168dff.css",
-    "main.js": "/MyWeb/static/js/main.da8e2464.js",
+    "main.css": "/MyWeb/static/css/main.5f27a229.css",
+    "main.js": "/MyWeb/static/js/main.d4152c7f.js",
+    "static/media/NGUYEN LE TUYEN_CV.pdf": "/MyWeb/static/media/NGUYEN LE TUYEN_CV.ef4c6885c7b3079d939b.pdf",
     "static/media/about-ufo.webp": "/MyWeb/static/media/about-ufo.2bef09888eef306b988c.webp",
     "static/media/about-blackhole.webp": "/MyWeb/static/media/about-blackhole.4cb188b6d8d554f44eab.webp",
     "index.html": "/MyWeb/index.html",
-    "main.22168dff.css.map": "/MyWeb/static/css/main.22168dff.css.map",
-    "main.da8e2464.js.map": "/MyWeb/static/js/main.da8e2464.js.map"
+    "main.5f27a229.css.map": "/MyWeb/static/css/main.5f27a229.css.map",
+    "main.d4152c7f.js.map": "/MyWeb/static/js/main.d4152c7f.js.map"
   },
   "entrypoints": [
-    "static/css/main.22168dff.css",
-    "static/js/main.da8e2464.js"
+    "static/css/main.5f27a229.css",
+    "static/js/main.d4152c7f.js"
   ]
 }
