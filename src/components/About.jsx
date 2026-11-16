@@ -26,7 +26,7 @@ const FIGS = [
   },
 ];
 
-export default function About() {
+export default function About({ onOpenProfile }) {
   return (
     <section id="about" className="about">
       <Reveal as="h2" className="mono">( About )</Reveal>
@@ -40,11 +40,28 @@ export default function About() {
         <div className="about-figs">
           {FIGS.map((f) => (
             <Reveal key={f.no} as="figure" effect="tv" delay={f.delay} className="fig">
-              {/* inner class: floating style */}
-              <div className="fig-in" style={f.float}>
+              {/* inner class: floating style; bấm / Enter / Space để mở hồ sơ */}
+              <div
+                className="fig-in fig-btn"
+                style={f.float}
+                role="button"
+                tabIndex={0}
+                aria-haspopup="dialog"
+                aria-label={`Open profile (${f.title})`}
+                onClick={(e) => onOpenProfile?.(e.currentTarget, f.src)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    onOpenProfile?.(e.currentTarget, f.src);
+                  }
+                }}
+              >
                 <div className="fig-frame">
                   <img src={f.src} alt={f.alt} loading="lazy" decoding="async" />
                   <span className="fig-scan" aria-hidden="true" />
+                  <span className="fig-open mono" aria-hidden="true">
+                    Open file
+                  </span>
                 </div>
                 <figcaption className="fig-foot mono">
                   <span>{f.left}</span>

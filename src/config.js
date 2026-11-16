@@ -54,4 +54,30 @@ export const CONFIG = {
       },
     ],
   },
+  // Hồ sơ (cửa sổ mở khi bấm 2 hình ở About). Languages hiển thị là mục số 06 (sau stats).
+  profile: {
+    name: 'TUYEN NGUYEN',
+    alias: 'Sterling',
+    id: 'FILE No. 0x2F-TN',
+    photo: '', // ảnh dự phòng; khi bấm hình nào ở About thì ảnh của hình đó được dùng làm chân dung
+    // Nút tải CV (bấm vào mã vạch). File PDF đặt ở src/assets/ và được import trong App.js.
+    cv: { downloadName: 'NGUYEN LE TUYEN_CV.pdf', label: 'CV' },
+    status: 'employed', // trạng thái công việc: 'employed' (đang có việc) | 'unemployed' (đang tìm việc)
+    stats: [
+      { label: 'Birthday', value: '09 / 02 / 2001' },
+      { label: 'Origin', value: 'Ho Chi Minh City, Vietnam' },
+      { label: 'Occupation', value: 'Software Engineer' },
+      {
+        label: 'Education',
+        value: 'Ho Chi Minh Open University',
+        lines: 'Bachelor of Information Technology (2019 — 2023)',
+      },
+      { label: 'Experience', value: '4 years' },
+    ],
+    // level: 1–5
+    languages: [
+      { name: 'Vietnamese', level: 5 },
+      { name: 'English', level: 3 },
+    ],
+  },
 };

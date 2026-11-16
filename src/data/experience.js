@@ -1,17 +1,10 @@
 export const EXPERIENCE = [
   {
     period: '10/2025 – Now',
-    company: 'FPT SOFTWARE',
+    company: 'FPT SOFTWARE CO., LTD',
     location: 'Ho Chi Minh City, Vietnam',
     job_type: 'Full-time',
     tech: ['Python', 'Pandas', 'Matplotlib', 'MATLAB'],
-    // Thành tích (tuỳ chọn). Mỗi mục: chuỗi, hoặc { title, desc, date }. Bỏ trống/xoá thì mục Achievements tự ẩn.
-    achievements: [
-      {
-        title: 'Certificate Top Performer - GSI GROUP LLC',
-        date: '2024',
-      },
-    ],
     roles: [
       {
         title: 'Software Engineer',
@@ -40,6 +33,12 @@ export const EXPERIENCE = [
     summary:
       'Built Allplan desktop add-ons and the Piledesigner web front-end. Started as a junior developer on the Automation-Hub reporting tools.',
     tech: ['Python', 'FastAPI', 'Flask', 'TypeScript', 'React', 'AllplanAPI', 'Odoo', 'MariaDB'],
+    achievements: [
+      {
+        title: 'Top Performer Certificate - GSI GROUP LLC',
+        date: '2024',
+      },
+    ],
     roles: [
       {
         title: 'Software Developer',
