@@ -13,15 +13,13 @@ import Contact from './components/Contact';
 import DailyQuote from './components/DailyQuote';
 import ShootingStar from './components/ShootingStar';
 import ContactCard from './components/ContactCard';
-import ProfileCard from './components/ProfileCard';
+import ProfileSheet from './components/ProfileSheet';
 import Footer from './components/Footer';
 import Loader from './components/Loader';
 import { preloadFonts, preloadImages } from './lib/preload';
-import blackhole from './assets/about-blackhole.webp';
-import ufo from './assets/about-ufo.webp';
-import cvFile from './assets/NGUYEN LE TUYEN_CV.pdf';
 
 // Dữ liệu hồ sơ = CONFIG.profile
+const { blackhole, ufo, cv: cvFile } = CONFIG.assets;
 const PROFILE = { ...CONFIG.profile, cv: { ...CONFIG.profile.cv, file: cvFile } };
 
 const MAX_WAIT = 10000; // quá lâu (mạng chậm / lỗi) thì vẫn cho vào trang
@@ -49,18 +47,18 @@ export default function App() {
     setCardOpen(false);
   }, []);
 
-  // Hồ sơ: bấm 1 trong 2 hình ở About → cùng mở một cửa sổ
-  const [profileOpen, setProfileOpen] = useState(false);
-  const [profilePhoto, setProfilePhoto] = useState(''); // ảnh của hình vừa bấm (giữ lại khi đóng để không nhấp nháy)
-  const profileTrigger = useRef(null);
-  const openProfile = useCallback((el, photo) => {
-    profileTrigger.current = el;
-    if (photo) setProfilePhoto(photo);
-    setProfileOpen(true);
+  // Hồ sơ: bấm 1 trong 2 hình ở About → cùng mở một cửa sổ kiểu Experience
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [sheetPhoto, setSheetPhoto] = useState('');
+  const sheetTrigger = useRef(null);
+  const openSheet = useCallback((el, photo) => {
+    sheetTrigger.current = el;
+    if (photo) setSheetPhoto(photo);
+    setSheetOpen(true);
   }, []);
-  const closeProfile = useCallback(() => {
-    setProfileOpen(false);
-    profileTrigger.current?.focus?.({ preventScroll: true }); // trả focus về hình đã bấm
+  const closeSheet = useCallback(() => {
+    setSheetOpen(false);
+    sheetTrigger.current?.focus?.({ preventScroll: true });
   }, []);
 
   // Các việc cần xong trước khi hiện trang
@@ -118,13 +116,13 @@ export default function App() {
       <Hero role={CONFIG.role} place={CONFIG.place} />
       <DailyQuote />
       <ShootingStar />
-      <About onOpenProfile={openProfile} />
+      <About onOpenProfile={openSheet} />
       <Skills items={SKILLS} />
       <Experience items={EXPERIENCE} />
       <Contact />
       <Footer name={CONFIG.name} />
       <ContactCard open={cardOpen} onClose={closeCard} placement={placement} onMove={pinCard} {...CONFIG.contact} />
-      <ProfileCard open={profileOpen} onClose={closeProfile} profile={{ ...PROFILE, photo: profilePhoto || PROFILE.photo }} />
+      <ProfileSheet open={sheetOpen} onClose={closeSheet} profile={{ ...PROFILE, photo: sheetPhoto || PROFILE.photo }} />
     </>
   );
 }

@@ -483,7 +483,7 @@ h2 {
 .fig-frame {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 9 / 16;
+  aspect-ratio: 1 / 1; /* hình vuông (trước là 9 / 16) */
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #000;
@@ -494,6 +494,7 @@ h2 {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: 50% 35%; /* khi cắt vuông, giữ phần mặt/thân trên; tăng % để lấy phần thấp hơn */
   filter: contrast(1.06) saturate(0.92);
   transition: transform 1.2s cubic-bezier(0.2, 0.9, 0.2, 1), filter 0.5s;
 }
@@ -741,7 +742,7 @@ footer {
   list-style: none;
   padding: 0;
   position: relative;
-  height: 48vw; /* khung tỉ lệ theo chiều rộng để bố cục co giãn đều */
+  height: 40vw; /* khung tỉ lệ theo chiều rộng để bố cục co giãn đều */
 }
 .skill {
   position: absolute;
@@ -750,8 +751,9 @@ footer {
   font-family: "Unbounded", sans-serif;
   font-weight: 500;
   font-size: max(11px, calc(var(--s) * 1vw));
-  line-height: 1.1;
-  white-space: nowrap;
+  line-height: 1.15;
+  width: max-content;
+  max-width: 13em; /* tên nhóm dài sẽ tự xuống 2 dòng */
   cursor: default;
   transition: filter 0.3s;
 }
@@ -797,20 +799,22 @@ footer {
     animation: none;
   }
 }
-.skill:hover {
+.skill:hover,
+.skill:focus-within {
+  z-index: 30; /* nhóm đang mở nổi lên trên các nhóm khác */
   --c1: #c9d1e6;
   --c2: #fff;
   --c3: #fff;
   filter: drop-shadow(0 0 14px rgba(220, 230, 255, 0.55));
 }
 .skill.t1 {
-  --s: 3.4;
+  --s: 2.6;
   --c1: #8c93a6;
   --c2: #fff;
   --c3: #b9c2d8;
 }
 .skill.t2 {
-  --s: 2.5;
+  --s: 2.2;
   --c1: #7d849a;
   --c2: #e6eaf4;
   --c3: #a9b2c8;
@@ -827,36 +831,129 @@ footer {
   --c2: #a4abbe;
   --c3: #8a91a6;
 }
+/* cửa sổ nhỏ hiện ra khi rê chuột / focus vào một nhóm skill */
+.skill-box {
+  position: relative;
+  outline: none;
+}
+.skill-pop {
+  position: absolute;
+  z-index: 5;
+  top: calc(100% + 14px);
+  left: 0;
+  width: max-content;
+  max-width: min(320px, 80vw);
+  padding: 14px 16px 16px;
+  background: rgba(8, 10, 16, 0.94);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+  font-family: "Inter", system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.4;
+  white-space: normal;
+  color: var(--fg);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(6px);
+  transition: opacity 0.25s, transform 0.25s, visibility 0s linear 0.25s;
+}
+/* cầu nối vô hình để rê chuột từ tên nhóm xuống cửa sổ không bị mất hover */
+.skill-pop::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -16px;
+  height: 16px;
+}
+.skill-box[data-h="r"] .skill-pop {
+  left: auto;
+  right: 0;
+}
+.skill-box[data-v="up"] .skill-pop {
+  top: auto;
+  bottom: calc(100% + 14px);
+  transform: translateY(-6px);
+}
+.skill-box[data-v="up"] .skill-pop::before {
+  top: auto;
+  bottom: -16px;
+}
+.skill:hover .skill-pop,
+.skill:focus-within .skill-pop {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: none;
+  transition-delay: 0s;
+}
+.skill-pop-head {
+  display: block;
+  color: var(--mut);
+  line-height: 1.4;
+}
+.skill-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.skill-chip {
+  padding: 3px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 12px;
+  color: #d5dbec;
+}
+@media (prefers-reduced-motion: reduce) {
+  .skill-pop {
+    transition: none;
+  }
+}
 @media (max-width: 860px) {
   .skills-cloud {
     height: auto;
     display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 14px 26px;
+    flex-direction: column;
+    gap: 30px;
   }
   .skill {
-    position: static;
+    position: relative;
+    left: auto;
+    top: auto;
+    width: auto;
+    max-width: none;
   }
   .skill.t1 {
-    font-size: 30px;
+    font-size: 28px;
   }
   .skill.t2 {
-    font-size: 22px;
+    font-size: 24px;
   }
   .skill.t3 {
-    font-size: 17px;
+    font-size: 20px;
   }
-  .skill.t4 {
-    font-size: 13px;
+  /* mobile không có hover: danh sách tech hiện sẵn ngay dưới tên nhóm */
+  .skill-pop {
+    position: static;
+    width: auto;
+    max-width: none;
+    margin-top: 10px;
+    padding: 0;
+    background: none;
+    border: 0;
+    box-shadow: none;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: none;
   }
-  /* so le nhẹ để vẫn có cảm giác "lộn xộn" trên mobile */
-  .skill:nth-child(3n + 1) {
-    margin-left: 8vw;
-  }
-  .skill:nth-child(4n + 3) {
-    margin-top: 12px;
-    margin-right: 6vw;
+  .skill-pop::before {
+    display: none;
   }
 }
 
@@ -2518,4 +2615,102 @@ body:not(.loaded) .hero {
   .pc-status i {
     animation: none;
   }
+}
+
+/* Nút tải CV trong ProfileSheet */
+.xs-cv {
+  color: inherit;
+  text-decoration: none;
+}
+.xs-tags li:has(.xs-cv):hover {
+  background: rgba(223, 230, 255, 0.1);
+  border-color: var(--ag);
+}
+
+/* ProfileSheet: 2 cột (avatar + mã vạch | danh sách 01-06) */
+.xs-pf {
+  display: grid;
+  grid-template-columns: minmax(170px, 1fr) 5fr;
+  gap: clamp(24px, 4vw, 64px);
+  align-items: start;
+}
+.xs-pf-id {
+  position: sticky;
+  top: 0;
+}
+.xs-pf-lang {
+  display: flex;
+  flex-direction: column;
+}
+.xs-pf-lang li {
+  justify-content: flex-start;
+  gap: 28px;
+  padding: 6px 0;
+  border-bottom: 0;
+}
+.xs-pf-lang .xs-ach-t {
+  min-width: 140px;
+}
+@media (max-width: 860px) {
+  .xs-pf {
+    grid-template-columns: 1fr;
+  }
+  .xs-pf-id {
+    position: static;
+    max-width: 200px;
+  }
+}
+
+/* ProfileSheet: lưới 2 cột cho các mục 01-06 */
+.xs-pf-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(28px, 5vh, 56px) clamp(24px, 4vw, 64px);
+}
+.xs-pf-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.xs-pf-l {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--mut);
+}
+.xs-pf-l i {
+  font-style: normal;
+  color: var(--ag);
+}
+@media (max-width: 560px) {
+  .xs-pf-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ProfileSheet: đốm xanh canh giữa theo dòng chữ STATUS */
+.xs-bar .pc-status {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 0;
+  line-height: 1;
+}
+.xs-bar .pc-status i {
+  flex: none;
+  vertical-align: baseline;
+  position: relative;
+  top: -1px; /* chỉnh 0 / -1px / -2px nếu muốn đốm cao thấp hơn chút */
+}
+
+/* ProfileSheet: dòng phụ (Bachelor…, Python | Backend, Viet Nam) dùng cùng font với dòng tiêu đề */
+.xs-pf-cell .xs-ach-d {
+  font-family: "Unbounded", sans-serif;
+  font-weight: 400;
+  overflow-wrap: anywhere;
 }

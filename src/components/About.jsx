@@ -1,6 +1,7 @@
 import Reveal from './Reveal';
-import blackhole from '../assets/about-blackhole.webp';
-import ufo from '../assets/about-ufo.webp';
+import { CONFIG } from '../config';
+
+const { blackhole, ufo } = CONFIG.assets;
 
 // Pics
 const FIGS = [
@@ -27,6 +28,7 @@ const FIGS = [
 ];
 
 export default function About({ onOpenProfile }) {
+
   return (
     <section id="about" className="about">
       <Reveal as="h2" className="mono">( About )</Reveal>
