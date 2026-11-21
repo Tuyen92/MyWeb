@@ -23,7 +23,17 @@ export default function Navbar({ name, links, onContact }) {
 
   return (
     <nav className="mono" ref={navRef}>
-      <span>{name}</span>
+      <a
+        href="#top"
+        className="nav-name"
+        onClick={(e) => {
+          e.preventDefault();
+          setOpen(false);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+      >
+        {name}
+      </a>
 
       <button
         type="button"

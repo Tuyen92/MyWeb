@@ -3,15 +3,15 @@ import { CONFIG } from '../config';
 
 const { blackhole, ufo } = CONFIG.assets;
 
-// Pics
+// PICS
 const FIGS = [
   {
     src: blackhole,
     alt: 'img.01',
     no: '01',
     title: 'Event Horizon',
-    left: 'SECTOR 7G',
-    right: 'LOCKED',
+    left: 'INSTA',
+    right: '@nguyenletuyen_',
     delay: 150,
     float: { '--fd': '11.5s', '--fdel': '-3s', '--fx': '7px', '--fy': '12px', '--fr': '-1deg' },
   },
@@ -20,8 +20,8 @@ const FIGS = [
     alt: 'img.02',
     no: '02',
     title: 'Unidentified Object',
-    left: 'SIGNAL 0x2F',
-    right: 'TRACKING',
+    left: 'INSTA',
+    right: '@nguyenletuyen_',
     delay: 350,
     float: { '--fd': '9.5s', '--fdel': '-8s', '--fx': '-9px', '--fy': '-14px', '--fr': '1.3deg' },
   },

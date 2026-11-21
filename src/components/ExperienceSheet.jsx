@@ -5,6 +5,11 @@ import TechLogos from './TechLogos';
 
 const pad = (n) => String(n + 1).padStart(2, '0');
 
+const renderRich = (text) =>
+  text.split(/\*\*(.+?)\*\*/g).map((part, i) =>
+    i % 2 ? <strong key={i}>{part}</strong> : part
+  );
+
 /**
  * Cửa sổ đen kéo từ dưới màn hình lên (full màn hình), hiện chi tiết một mục Experience.
  * Đóng bằng: nút X, phím Esc, hoặc click vào vùng tối phía trên.
@@ -185,7 +190,7 @@ export default function ExperienceSheet({ open, item, index, total, onClose, onN
                         {p.tasks.map((t, k) => (
                           <li key={k}>
                             <span className="xs-dot" aria-hidden="true" />
-                            <p>{t}</p>
+                            <p>{renderRich(t)}</p>
                           </li>
                         ))}
                       </ul>
@@ -194,6 +199,22 @@ export default function ExperienceSheet({ open, item, index, total, onClose, onN
                 </div>
               </section>
             )}
+
+            {/* Tech: logo 3D (xem data/techLogos.js) */}
+            {item.tech?.length > 0 && (
+                <section className="xs-sec xs-in" style={{ '--i': 6 }}>
+                  <h4 className="mono xs-label">
+                    <i>{nextSec()}</i>Tech
+                  </h4>
+                  <ul className="xs-tags">
+                    {item.tech.map((t) => (
+                      <li key={t} className="mono">
+                        {t}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
 
             {/* Achievements */}
             {achievements.length > 0 && (
@@ -215,22 +236,6 @@ export default function ExperienceSheet({ open, item, index, total, onClose, onN
                 </ul>
               </section>
             )}
-
-            {/* Tech: logo 3D (xem data/techLogos.js) */}
-            {item.tech?.length > 0 && (
-                <section className="xs-sec xs-in" style={{ '--i': 6 }}>
-                  <h4 className="mono xs-label">
-                    <i>{nextSec()}</i>Tech
-                  </h4>
-                  <ul className="xs-tags">
-                    {item.tech.map((t) => (
-                      <li key={t} className="mono">
-                        {t}
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-              )}
           </div>
         </div>
 

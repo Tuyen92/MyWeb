@@ -10,15 +10,15 @@ export const EXPERIENCE = [
         title: 'Software Engineer',
         projects: [
           {
-            name: 'GEVernova Tunning & Operability',
+            name: 'GEVernova Tunning & Operability for Wind Energy',
             desc: 'Develop various plugins to automate the process of handling simulation data for wind turbine design and evaluation.',
             tech: ['Python', 'Pandas', 'Matplotlib', 'MATLAB'],
             tasks: [
-              'Developed plugin workflows for data extraction, MATLAB-based calculations using Pandas, automated Matplotlib/Excel report generation, and production readiness support.',
-              'Fixed bugs and implemented unit tests for all plugins using GitHub Copilot.',
-              'Ran simulation plugins on Simulation Data Management in multiple environments.',
-              'Held sync-up meetings with the Project Owner for sprint planning and user story reporting.',
-              'Developed and maintained documentation for all plugins to ensure clear usage, integration, and maintenance guidelines.',
+              'Developed end-to-en plugin workflows for wind energy data extraction and MATLAB-Based engineering calculations using **Python** and **Pandas**.',
+              'Built automated reporting using **Matplotlib** and **openpyxl (Excel)** to generate standardized analytical report for engineering teams across simulation environments.',
+              'Improve code reliability and production readiness by writing comprehensive unit test suites.',
+              'Authored technical documentation and user guides, streamlining plugin setup and maintenance for engineering team.',
+              'Collaborated directly with the Product Owner on Agile/Scrum sprint planning and user story review to ensure timely feature delivery.',
             ],
           },
         ],
@@ -41,104 +41,42 @@ export const EXPERIENCE = [
     ],
     roles: [
       {
+        title: 'Junior Software Developer',
+        projects: [
+          {
+            name: 'Automation-Hub',
+            desc: 'Internal Enterprise Suite.',
+            tech: ['Odoo', 'Python', 'FastAPI', 'MariaDB'],
+            tasks: [
+              'Built an **Odoo Timesheet Analytics API** with **FastAPI** and designed relational schemas in MariaDB to process raw timesheet logs, providing the Software Engineering Manager with fast automated automated reports on project progress and budget utilization.',
+              'Engineered a **CV ETL** and **Evaluation Processing** using **FastAPI** and **MariaDB** ro parse candidate resumes, and automate recruitment workflows, helping reduce HR screening time.',
+              'Developed a **Multilingual Translation Web App** with **Flask** and designed relational schemas in **MariaDB**, integrating DeeppL, Google Translate, and LibreTranslate APIs with a custom construction glossary engine.',
+              'Created an **Automated Assessment Platform** with **Flask** and designed relational schemas in **MariaDB**, integrating Moodle and Odoo APIs to synchronize candidate profiles and evaluate technical and MBTI test results.'
+            ],
+          },
+        ],
+      },
+      {
         title: 'Software Developer',
         projects: [
           {
-            name: 'Schöck Tronsole',
-            desc: 'Allplan add-on for stair panel placement and adjustment..',
-            tech: ['AllplanAPI', 'Python'],
+            name: 'Allplan CAD Desktop Add-ons',
+            desc: 'Allplan add-ons.',
+            tech: ['3D Geometry', 'Python'],
             tasks: [
-              'Implemented user-selected placement points and updated geometry based on product type.',
-              'Implemented handlers that allow users to adjust the geometry, position, and direction of the objects.',
+              '**Schöck Tronsole:** Implemented user-selected placement points with product-based geometry updates and built interactive handler to adjust 3D objects geometry, position, and direction.',
+              '**Critical Zone:** Developed placement point selection, automated perpendicular wall connection detection, critical zone center calculations, and a custom UI palette for data handling.',
+              '**Tebea Balcony Connector:** Strucutred Excel-to-Json product catalogs, built interactive UI palettes with parameter constraint validation, and implemented 3D reinforcement geometry, arrow labeling, and object reactivation workflows.'
             ],
           },
           {
-            name: 'Critical Zone',
-            desc: 'Allplan add-on for defining critical zones on a slab.',
-            tech: ['AllplanAPI', 'Python', ],
-            tasks: [
-              'Implemented a user-selected placement point, detecting perpendicular wall connections and calculating the center of critical zone.',
-              'Designed and developed a UI palette and handled its data validation.',
-            ],
-          },
-          {
-            name: 'Tebea Balcony Connector',
-            desc: 'Allplan add-on for configuring balcony connector products in 3D.',
-            tech: ['AllplanAPI', 'Python'],
-            tasks: [
-              'Designed a JSON-based data structure to store detailed product information extracted from an Excel file.',
-              'Developed a UI palette and handled constraints for users choosing product parameters.',
-              'Implemented reinforcement geometry and arrow labels for each product type.',
-              'Implemented a workflow for 3D positioning, orientation, and reactivation mode of objects.',
-            ],
-          },
-          {
-            name: 'Piledesigner',
+            name: 'Piledesigner Web Application',
             desc: 'Web application for soil layer analysis and calculations.',
-            tech: ['TypeScript', 'React', 'RestAPI'],
+            tech: ['React', 'TypeScript'],
             tasks: [
-              'Served as the main front-end developer, building applications with TypeScript and React.',
-              'Re-designed the UI and improved the UX for the Login, Register, Workspace, Account, and Projects pages.',
-              'Implemented a cookie-based “Remember Me”, the registration workflow, user info validation, and project–user role assignment.',
-              'Integrated new back-end APIs, refactored the front-end component workflows, and handled user permissions at the component level.',
-              'Fixed bugs and enhanced data grid components to display multiple data types and validate user inputs. \nCustomized themes and handled translated text for the guided tour feature.',
-              'Tested all features of the Piledesigner front-end.',
-            ],
-          },
-        ],
-      },
-      {
-        title: 'Junior Software Developer',
-        projects: [
-          {
-            name: 'Odoo Timesheet Reports',
-            desc: 'Developed APIs to process data from Odoo and generate visualizations.',
-            tech: ['Odoo', 'Python', 'FastAPI', 'MariaDB'],
-            tasks: [
-              'Designed and created a database schema in MariaDB to store raw data and transformed data.',
-              'Developed FastAPI APIs to process Odoo Timesheet data and generate report metrics.'
-            ],
-          },
-        ],
-      },
-      {
-        title: 'Junior Software Developer',
-        projects: [
-          {
-            name: 'CV ETL',
-            desc: 'Web application for CV scanning and evaluation..',
-            tech: ['FastAPI', 'Python', 'FastAPI', 'MariaDB'],
-            tasks: [
-              'Designed and created a database schema in MariaDB to store applicant data and CV logs.',
-              'Developed FastAPI endpoints to process applicant data from ChatGPT and log CV evaluation workflows.'
-            ],
-          },
-        ],
-      },
-      {
-        title: 'Junior Software Developer',
-        projects: [
-          {
-            name: 'Internal Translation Platform',
-            desc: 'Web application for translation in the construction industry.',
-            tech: ['Python', 'Flask', 'MariaDB'],
-            tasks: [
-              'Designed and created a database schema in MariaDB to store construction glossaries in English, German, and Vietnamese.',
-              'Developed a Flask application integrating DeepL, Google Translate, and LibreTranslate, with a workflow to replace words and refine translation.'
-            ],
-          },
-        ],
-      },
-      {
-        title: 'Junior Software Developer',
-        projects: [
-          {
-            name: 'Assessment web application',
-            desc: 'Web application for candidate assessment and evaluation.',
-            tech: ['Python','Flask', 'MariaDB', 'Moodle', 'Odoo'],
-            tasks: [
-              'Designed and created a database schema in MariaDB to store quiz data, candidate information, assessments, and results.',
-              'Developed a Flask application integrating Moodle and Odoo APIs to retrieve data and process technical and MBTI assessments.'
+              'Led the Front-End architecture and UI/UX overhaul for core modules (Workspace , Project, Account, Auth), improving user workflow efficiency.',
+              'Implemented secure cookie-based authenticaiton ("Remember Me"), multi-step registration validation and granular component-level RBAC permission.',
+              'Enhenced data grid components to support rendering types, real-time input validation, and localized guided tours.',
             ],
           },
         ],
@@ -152,33 +90,28 @@ export const EXPERIENCE = [
     job_type: 'Full-time',
     summary:
       'First job: developed and customized ERP modules in Python.',
-    tech: ['Python', 'ERP'],
+    tech: ['Python', 'ERPNext'],
     roles: [
       {
         title: 'Junior Backend Developer',
         projects: [
           {
-            name: 'Multi E-com',
+            name: 'Multi-Channel E-Commerce Integration',
             desc: 'Integrated an e-commerce platform with ERPNext and synchronized data between systems.',
-            tech: ['Python', 'RestAPI', 'ERPNext'],
+            tech: ['Python', 'ERPNext', 'REST APIs'],
             tasks: [
-              'Customized ERPNext modules to store seller data, including seller information, products, warehouse, orders, invoices, and shipping.',
-              'Integrated Tiki and TikTok e-commerce APIs with ERPNext.',
-              'Built features to handle data between ERPNext and e-commerce platforms.',
-              'Built webhooks to automatically call APIs and ensure data consistency between systems.',
-              'Tested features and workflows of seller selling processes in ERPNext',
+              'Integrated **TIKI** and **TIKTOK SHOP** APIs into **ERPNext**, synchronizing product catalogs, invertory levels, orders, invoices, and shipping statuses across platforms.',
+              'Engineered event-dirven webhooks to ensure real-time data consistency between ERPNext and external marketplaces, eliminating manual order entry errors.',
             ],
           },
 
 
           {
-            name: 'Thai Son Driving Training Center’s LMS',
+            name: 'LMS - Thai Son Driving Training Center',
             desc: 'Customized ERPNext into a learning management system for driving training.',
             tech: ['Python', 'ERPNext'],
             tasks: [
-              'Customized ERPNext modules to store data, including student information, courses, and assessments.',
-              'Developed features in ERPNext for handling course enrollment, attendance tracking, and course assessments.',
-              'Designed and developed UI/UX in ERPNext for student learning.',
+              'Customized ERPNext core modules and developed student-facing UI/UX to manage course enrollements, attendance, and examination.',
             ],
           },
         ],

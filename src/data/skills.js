@@ -30,12 +30,12 @@ export const SKILLS = [
   },
   {
     name: 'Core Concepts',
-    tier: 3, x: 76, y: 40,
+    tier: 3, x: 76, y: 30,
     items: ['OOP', 'Design Patterns', 'Agile', 'Scrum'],
   },
   {
     name: 'AI Tools',
-    tier: 3, x: 24, y: 82,
+    tier: 3, x: 80, y: 54,
     items: ['GitHub Copilot', 'ChatGPT', 'Claude', 'AI-assisted coding'],
   },
 ];

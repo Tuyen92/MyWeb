@@ -757,6 +757,26 @@ footer {
   cursor: default;
   transition: filter 0.3s;
 }
+/* skill bị popup của nhóm khác đè thì được JS đẩy ra qua --px / --py */
+.skill {
+  translate: var(--px, 0px) var(--py, 0px);
+}
+/* phải đủ độ ưu tiên để thắng `.rv.rv-tv.fx-done { transition: filter .3s }` */
+.skill.rv.rv-tv.fx-done {
+  transition:
+    filter 0.3s,
+    translate 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .skill.rv.rv-tv.fx-done {
+    transition: filter 0.3s;
+  }
+}
+@media (max-width: 860px) {
+  .skill {
+    translate: none;
+  }
+}
 /* lớp trong: chữ ánh bạc (giống đoạn About, mỗi tier tối dần) + trôi lơ lửng */
 .skill-in {
   display: inline-block;
@@ -844,7 +864,7 @@ footer {
   width: max-content;
   max-width: min(320px, 80vw);
   padding: 14px 16px 16px;
-  background: rgba(8, 10, 16, 0.94);
+  background: black;
   border: 1px solid var(--line);
   border-radius: 6px;
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
@@ -2713,4 +2733,9 @@ body:not(.loaded) .hero {
   font-family: "Unbounded", sans-serif;
   font-weight: 400;
   overflow-wrap: anywhere;
+}
+
+.xs-list strong {
+  font-weight: 600;
+  color: #fff;
 }

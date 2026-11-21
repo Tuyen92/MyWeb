@@ -3,18 +3,9 @@ import { useEffect, useRef, useState } from 'react';
 const MIN_MS = 2400; // hiện tối thiểu, để hoạt ảnh kịp "đọc" được dù máy tải rất nhanh
 const EXIT_MS = 1300; // khớp với thời gian chuyển ra trong CSS (.ld.out)
 
-const MESSAGES = [
-  [0.0, 'Locking onto pulsar'],
-  [0.35, 'Spinning up the signal'],
-  [0.7, 'Calibrating the field'],
-  [1.0, 'Signal acquired'],
-];
-
-
 export default function Loader({ done, total, loaded, onComplete }) {
   const pctRef = useRef(null);
   const barRef = useRef(null);
-  const msgRef = useRef(null);
   const doneRef = useRef(done);
   const cbRef = useRef(onComplete);
   const [gone, setGone] = useState(false);
@@ -28,7 +19,6 @@ export default function Loader({ done, total, loaded, onComplete }) {
     let v = 0;
     let raf = 0;
     let fired = false;
-    let msgIdx = -1;
 
     const tick = (now) => {
       const dt = Math.min(0.1, (now - last) / 1000);
@@ -43,15 +33,6 @@ export default function Loader({ done, total, loaded, onComplete }) {
 
       if (pctRef.current) pctRef.current.textContent = `${String(Math.round(v * 100)).padStart(3, '0')}%`;
       if (barRef.current) barRef.current.style.transform = `scaleX(${v})`;
-
-      let m = 0;
-      MESSAGES.forEach(([at], i) => {
-        if (v >= at) m = i;
-      });
-      if (m !== msgIdx && msgRef.current) {
-        msgIdx = m;
-        msgRef.current.textContent = MESSAGES[m][1];
-      }
 
       if (v >= 1 && !fired) {
         fired = true;
@@ -93,11 +74,6 @@ export default function Loader({ done, total, loaded, onComplete }) {
       </div>
 
       <div className="ld-bottom">
-        <div className="ld-row">
-          <span className="mono ld-msg" ref={msgRef}>
-            {MESSAGES[0][1]}
-          </span>
-        </div>
         <div className="ld-track">
           <i ref={barRef} />
         </div>

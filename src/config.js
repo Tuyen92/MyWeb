@@ -13,7 +13,7 @@ export const CONFIG = {
   assets: {
     blackhole: asset('imgs/me_2.jpg'),
     ufo: asset('imgs/me.jpg'),
-    cv: asset('docs/NGUYEN LE TUYEN_CV.pdf'),
+    cv: asset('docs/NGUYEN LE TUYEN CV.pdf'),
   },
   text: 'STERLING',        // 3D text
   fontStyle: '700',
@@ -71,7 +71,7 @@ export const CONFIG = {
     id: 'FILE No. 0x2F-TN',
     photo: '', // ảnh dự phòng; khi bấm hình nào ở About thì ảnh của hình đó được dùng làm chân dung
     // Nút tải CV (bấm vào mã vạch). File PDF nằm trên Cloudflare R2 (xem CONFIG.assets.cv ở trên), App.js gắn link vào đây.
-    cv: { downloadName: 'NGUYEN LE TUYEN_CV.pdf', label: 'CV' },
+    cv: { downloadName: 'NGUYEN LE TUYEN CV.pdf', label: 'CV' },
     status: 'employed', // trạng thái công việc: 'employed' (đang có việc) | 'unemployed' (đang tìm việc)
     stats: [
       { label: 'Birthday', value: '09 / 02 / 2001' },
