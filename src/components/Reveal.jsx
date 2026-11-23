@@ -113,7 +113,6 @@ export default function Reveal({
       const b = 6 * k * k;
       blur.setAttribute('stdDeviation', `${b} ${b * 0.3}`);
 
-      const split = 7 * k * rgb;
       el.style.opacity = String(Math.min(1, (0.2 + 0.8 * p) * flick + 0.05));
       el.style.transform = `translateX(${((rgb - 0.65) * 18 * k).toFixed(2)}px)`;
       raf = requestAnimationFrame(tick);

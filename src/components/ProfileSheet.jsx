@@ -52,7 +52,7 @@ export default function ProfileSheet({ open, onClose, profile }) {
     if (open && scrollRef.current) scrollRef.current.scrollTop = 0;
   }, [open]);
 
-  const { name, alias, id, photo, status, stats = [], languages = [], cv } = profile;
+  const { name, alias, photo, status, stats = [], languages = [], cv, intro } = profile;
   const employed = status !== 'unemployed';
 
   // CV nằm ở domain khác (R2) nên thuộc tính `download` của <a> bị trình duyệt bỏ qua.
@@ -137,6 +137,9 @@ export default function ProfileSheet({ open, onClose, profile }) {
                 )}
               </aside>
 
+              <div className="xs-pf-main">
+                {intro && <p className="xs-sum xs-pf-intro">{intro}</p>}
+
               {/* 2 cột, xếp theo hàng: 01 02 / 03 04 / 05 06 */}
               <ul className="xs-pf-grid">
                 {stats.map((s, k) => (
@@ -171,6 +174,7 @@ export default function ProfileSheet({ open, onClose, profile }) {
                   </li>
                 )}
               </ul>
+              </div>
             </section>
           </div>
         </div>

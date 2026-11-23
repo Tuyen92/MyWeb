@@ -9,7 +9,7 @@ export const SKILLS = [
     items: ['Python', 'Java', 'TypeScript', 'JavaScript', 'SQL'],
   },
   {
-    name: 'Backend & Frameworks',
+    name: 'Backend Frameworks',
     tier: 1, x: 36, y: 12,
     items: ['FastAPI', 'Django', 'Django REST Framework', 'REST API', 'Node.js', 'ERPNext'],
   },

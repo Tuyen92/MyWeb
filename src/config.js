@@ -6,7 +6,6 @@ const MYLINKEDIN = 'https://www.linkedin.com/in/tuyenguyenle/';
 const ASSET_BASE = 'https://pub-cc0a8a59774e45c5aac90db0c45e33a7.r2.dev';
 // path dạng 'imgs/abc.webp' — mỗi đoạn được mã hóa riêng (dấu cách → %20), dấu / giữ nguyên
 const asset = (path) => `${ASSET_BASE}/${path.split('/').map(encodeURIComponent).join('/')}`;
-const MYINSTAGRAM = 'https://www.instagram.com/YOUR_USERNAME/'; // TODO: thay bằng link Instagram của bạn
 
 export const CONFIG = {
   // Hình + CV lưu trên Cloudflare R2. Đường dẫn phải đúng với thư mục + tên file trên bucket (imgs/ cho hình, docs/ cho CV).
@@ -58,13 +57,12 @@ export const CONFIG = {
         label: 'Find me on',
         lines: [
           { text: 'GitHub', href: MYGIT },
-          { text: 'LinkedIn', href: MYLINKEDIN },
-          { text: 'Instagram', href: MYINSTAGRAM },
+          { text: 'LinkedIn', href: MYLINKEDIN }
         ],
       },
     ],
   },
-  // Hồ sơ (cửa sổ mở khi bấm 2 hình ở About). Languages hiển thị là mục số 06 (sau stats).
+  // PERSIONAL PROFILE
   profile: {
     name: 'TUYEN NGUYEN',
     alias: 'Sterling',
@@ -72,7 +70,9 @@ export const CONFIG = {
     photo: '', // ảnh dự phòng; khi bấm hình nào ở About thì ảnh của hình đó được dùng làm chân dung
     // Nút tải CV (bấm vào mã vạch). File PDF nằm trên Cloudflare R2 (xem CONFIG.assets.cv ở trên), App.js gắn link vào đây.
     cv: { downloadName: 'NGUYEN LE TUYEN CV.pdf', label: 'CV' },
-    status: 'employed', // trạng thái công việc: 'employed' (đang có việc) | 'unemployed' (đang tìm việc)
+    status: 'employed', // 'employed' | 'unemployed'
+    intro:
+      'Results-driven Software Engineer with 4 years of experience specializing in Python development, backend engineering, and data automation. Experienced in developing RESTful APIs, ETL processing, ERP integrations, and engineering simulation plugins.',
     stats: [
       { label: 'Birthday', value: '09 / 02 / 2001' },
       { label: 'Origin', value: 'Hiep Binh, Ho Chi Minh City', lines: 'Viet Nam' },

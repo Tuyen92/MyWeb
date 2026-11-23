@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { latestRole } from '../data/experience';
-import TechLogos from './TechLogos';
 
 const pad = (n) => String(n + 1).padStart(2, '0');
 
@@ -200,7 +199,6 @@ export default function ExperienceSheet({ open, item, index, total, onClose, onN
               </section>
             )}
 
-            {/* Tech: logo 3D (xem data/techLogos.js) */}
             {item.tech?.length > 0 && (
                 <section className="xs-sec xs-in" style={{ '--i': 6 }}>
                   <h4 className="mono xs-label">

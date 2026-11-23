@@ -698,15 +698,19 @@ h2 {
 .cta-word {
   display: inline-block;
 }
-footer time {
+nav time {
   font-variant-numeric: tabular-nums;
+}
+.nav-time {
+  color: var(--mut);
+  white-space: nowrap;
 }
 footer {
   position: relative;
   z-index: 5;
   padding: 26px var(--pad) calc(26px + env(safe-area-inset-bottom, 0px));
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end; /* © tên nằm bên phải */
   color: var(--mut);
   border-top: 1px solid var(--line);
 }
@@ -1435,6 +1439,9 @@ a.cc-v:focus-visible {
   z-index: auto;
   scroll-snap-align: none; /* section trong sheet không tham gia snap của trang */
 }
+.xs-sec:has(> .xs-tags) {
+  margin-bottom: 24px;
+}
 .xs-content {
   display: flex;
   flex-direction: column;
@@ -1568,7 +1575,6 @@ a.cc-v:focus-visible {
 .xs-ach li {
   display: grid;
   grid-template-columns: 4.5em minmax(0, 1fr) auto;
-  gap: 0 clamp(12px, 2vw, 28px);
   align-items: baseline;
   padding: 18px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -2738,4 +2744,25 @@ body:not(.loaded) .hero {
 .xs-list strong {
   font-weight: 600;
   color: #fff;
+}
+
+/* ProfileSheet: đoạn giới thiệu ngắn dưới tên */
+.xs-pf-intro {
+  max-width: 62ch;
+  margin: 0 0 clamp(28px, 5vh, 48px);
+  color: var(--mut);
+  font-family: "Unbounded", sans-serif;
+  font-weight: 300;
+  font-size: clamp(13px, 1.15vw, 16px);
+  line-height: 1.8;
+}
+.xs-pf-main {
+  min-width: 0;
+}
+
+/* màn hình rất hẹp: ẩn giờ ở navbar cho đỡ chật */
+@media (max-width: 520px) {
+  .nav-time {
+    display: none;
+  }
 }
