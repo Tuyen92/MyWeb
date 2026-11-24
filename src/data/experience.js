@@ -45,7 +45,7 @@ export const EXPERIENCE = [
         projects: [
           {
             name: 'Allplan CAD Desktop Add-ons',
-            desc: 'Allplan add-ons.',
+            desc: 'Develope Python add-ons for 3D modeling and workflow automation in Allplan CAD.',
             tech: ['3D Geometry', 'Python'],
             tasks: [
               '**Schöck Tronsole:** Implemented user-selected placement points with product-based geometry updates and built interactive handler to adjust 3D objects geometry, position, and direction.',
@@ -70,7 +70,7 @@ export const EXPERIENCE = [
         projects: [
           {
             name: 'Automation-Hub',
-            desc: 'Internal Enterprise Suite.',
+            desc: 'Internal tools for business process automation and processing.',
             tech: ['Odoo', 'Python', 'FastAPI', 'MariaDB'],
             tasks: [
               '**Odoo Timesheet Analytics:** Built APIs using **FastAPI** and designed relational schemas in MariaDB to process raw timesheet logs, providing the Software Engineering Manager with fast automated automated reports on project progress and budget utilization.',
